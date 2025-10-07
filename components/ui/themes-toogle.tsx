@@ -18,9 +18,9 @@ export function ModeToggle() {
 
     return (
         theme === "dark" ? (
-            <Button onClick={() => setTheme("light")}><Sun /></Button>
+            <Button className="cursor-pointer h-5 w-5" size={"icon"} variant={"ghost"} onClick={() => setTheme("light")}><Sun /></Button>
         ) : (
-            < Button onClick={() => setTheme("dark")}><Moon /></Button>
+            < Button className="cursor-pointer h-5 w-5" size={"icon"} variant={"ghost"} onClick={() => setTheme("dark")}><Moon /></Button>
         )
     )
 }
