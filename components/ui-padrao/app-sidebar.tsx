@@ -1,25 +1,26 @@
+import Link from "next/link";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./sidebar-padrao";
 import { Home, Package, Settings, User } from "lucide-react";
 
 const items = [
     {
         title: "Home",
-        url: "home",
+        url: "/home",
         icon: Home,
     },
     {
         title: "Pessoas",
-        url: "person",
+        url: "/person",
         icon: User,
     },
     {
         title: "Produtos",
-        url: "product",
+        url: "/product",
         icon: Package,
     },
     {
         title: "Settings",
-        url: "settings",
+        url: "/settings",
         icon: Settings,
     },
 ]
@@ -35,10 +36,10 @@ export function AppSidebar() {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
-                                        <a href={item.url}>
+                                        <Link href={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}

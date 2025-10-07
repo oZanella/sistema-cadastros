@@ -1,9 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui-padrao/sidebar-padrao";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui-padrao/sidebar-padrao";
 import { AppSidebar } from "@/components/ui-padrao/app-sidebar";
 import { ThemeProvider } from "@/src/providers/theme-provider";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -31,11 +30,14 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <main>
-              <SidebarTrigger>
+            <SidebarInset>
+              <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+                <SidebarTrigger />
+              </header>
+              <main className="flex-1 p-6">
                 {children}
-              </SidebarTrigger>
-            </main>
+              </main>
+            </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>
       </body>
