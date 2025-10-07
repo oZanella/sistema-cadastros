@@ -1,4 +1,4 @@
-export default function GastosPage() {
+export default function Product() {
     return (
         <div>
 

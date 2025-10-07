@@ -1,5 +1,10 @@
-import HomePage from "../pages/Home/page";
+import { AppSidebar } from "@/components/ui-padrao/app-sidebar";
+import PageContainer from "@/pages/PageContainer/pageContainer";
 
-export default function Page() {
-  return <HomePage />
+export default function Homepage() {
+  return (
+    <PageContainer>
+      <AppSidebar />
+    </PageContainer>
+  )
 }
