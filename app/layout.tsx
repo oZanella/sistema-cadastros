@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/ui-padrao/app-sidebar";
 import { ThemeProvider } from "@/src/providers/theme-provider";
 import { ModeToggle } from "@/components/ui/themes-toogle";
 import { SettingsButton } from "@/components/ui/settings-button";
+import { LoginButton } from "@/components/ui/login-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
                 <div className="flex flex-row gap-2">
                   <ModeToggle />
                   <SettingsButton />
+                  <LoginButton />
                 </div>
               </header>
               <main className="flex-1 p-6">
