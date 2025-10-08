@@ -39,12 +39,21 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       if (error) throw error
 
       router.push('/person')
-    } catch (error: any) {
-      console.log(error)
-      if (error && error.code === 'invalid_credentials') {
-        setError('Credenciais incorretas')
-      } else
-        setError(error instanceof Error ? error.message : 'Ocorreu um erro')
+    } catch (err: unknown) {
+      console.log(err)
+
+      if (err instanceof Error) {
+
+        const supabaseError = err as Error & { code?: string }
+
+        if (supabaseError.code === 'invalid_credentials') {
+          setError('Credenciais incorretas')
+        } else {
+          setError(supabaseError.message)
+        }
+      } else {
+        setError('Ocorreu um erro')
+      }
     } finally {
       setIsLoading(false)
     }
