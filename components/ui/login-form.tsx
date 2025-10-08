@@ -43,7 +43,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       console.log(err)
 
       if (err instanceof Error) {
-
+        //
         const supabaseError = err as Error & { code?: string }
 
         if (supabaseError.code === 'invalid_credentials') {
