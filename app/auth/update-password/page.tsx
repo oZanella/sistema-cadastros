@@ -1,11 +1,11 @@
-import { ForgotPasswordForm } from '@/components/ui/forgot-password-form'
+import { UpdatePasswordForm } from "@/components/ui/update-password-form";
 
 export default function Page() {
   return (
     <div className="">
       <div className="">
-        <ForgotPasswordForm />
+        <UpdatePasswordForm />
       </div>
     </div>
-  )
+  );
 }
