@@ -1,6 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui-padrao/sidebar-padrao";
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from "@/components/ui-padrao/sidebar-padrao";
 import { AppSidebar } from "@/components/ui-padrao/app-sidebar";
 import { ThemeProvider } from "@/src/providers/theme-provider";
 import { ModeToggle } from "@/components/ui/themes-toogle";
@@ -45,9 +49,7 @@ export default function RootLayout({
                   <LoginButton />
                 </div>
               </header>
-              <main className="flex-1 p-6">
-                {children}
-              </main>
+              <main className="flex-1 p-6">{children}</main>
             </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>
