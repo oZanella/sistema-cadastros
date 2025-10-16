@@ -41,7 +41,7 @@ export function LoginForm({
 
       if (error) throw error;
 
-      router.push("/person");
+      router.push("/home");
     } catch (err: unknown) {
       console.log(err);
 

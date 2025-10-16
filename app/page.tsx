@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/ui-padrao/app-sidebar";
+import Login from "./login/page";
 
 export default function Homepage() {
-  return <AppSidebar />;
+  return <Login />;
 }
