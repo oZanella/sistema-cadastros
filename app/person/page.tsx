@@ -1,7 +1,14 @@
-export default function Person() {
-    return (
-        <div className="p-6 bg-emerald-600">
-            <h1 className="text-2xl font-bold">CR7 VERDE</h1>
-        </div>
-    );
+import Person from "../page-component/person/person";
+
+export const metadata = {
+  title: "Cadastro de Pessoas",
+  description: "Cadastro",
+};
+
+export default async function Calendar() {
+  return (
+    <>
+      <Person />
+    </>
+  );
 }
