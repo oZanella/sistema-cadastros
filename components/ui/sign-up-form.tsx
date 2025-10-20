@@ -86,6 +86,7 @@ export function SignUpForm({
                 <Input
                   id="password"
                   type="password"
+                  placeholder="informar senha"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -98,6 +99,7 @@ export function SignUpForm({
                 <Input
                   id="repeat-password"
                   type="password"
+                  placeholder="repetir senha"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
@@ -105,7 +107,11 @@ export function SignUpForm({
               </div>
 
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={isLoading}
+              >
                 {isLoading ? "Criando sua conta..." : "Inscrever-se"}
               </Button>
             </div>
