@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "@/components/form/form-input";
 import { PersonFormProps, personZod } from "@/app/person/schemas";
 import { Button } from "@/components/ui/button";
+import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
 
 export default function Person() {
   const form = useForm<PersonFormProps>({
@@ -17,7 +18,7 @@ export default function Person() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">CR7 VERDE</h1>
+      <TitlePersonalizado>Cadastrar Pessoa</TitlePersonalizado>
 
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormInput

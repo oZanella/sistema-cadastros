@@ -5,7 +5,7 @@ export const metadata = {
   description: "Cadastro",
 };
 
-export default async function Calendar() {
+export default async function CadPerson() {
   return (
     <>
       <Person />
