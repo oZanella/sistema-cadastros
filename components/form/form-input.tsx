@@ -9,7 +9,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 
-const inputFormVariants = cva("flex gap-1.5 flex-1", {
+const inputFormVariants = cva("flex gap-1.5", {
   variants: {
     variant: {
       vertical: "flex-col",
@@ -65,7 +65,7 @@ function FormInput<TFieldValues extends FieldValues>({
               <label
                 htmlFor={name}
                 className={cn(
-                  "text-sm font-medium text-foreground",
+                  "text-sm font-medium text-foreground ",
                   isHorizontal && "min-w-fit whitespace-nowrap"
                 )}
               >

@@ -5,10 +5,14 @@ export const personZod = z
   .object({
     id: z.number(),
     nome: z.string(),
+    sobrenome: z.string(),
     idade: z
       .number()
       .min(1, "Idade inválida deve ser maior que zero")
       .optional(),
+    dtcad: z.string(),
+    tp: z.boolean,
+    cpfcnpj: z.number,
   })
 
   //validação personalizada
