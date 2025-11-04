@@ -1,18 +1,19 @@
 import z from "zod";
 
 export const personZod = z
-  //validação genérica
   .object({
     id: z.number(),
     nome: z.string(),
     sobrenome: z.string(),
     idade: z
       .number()
-      .min(1, "Idade inválida deve ser maior que zero")
+      .min(1, "Idade inválida, deve ser maior que zero")
       .optional(),
     dtcad: z.string(),
-    tp: z.boolean,
-    cpfcnpj: z.number,
+    tp: z.boolean(),
+    cpfcnpj: z.number().optional(),
+    email: z.email("E-mail inválido"),
+    telefone: z.number().optional(),
   })
 
   //validação personalizada

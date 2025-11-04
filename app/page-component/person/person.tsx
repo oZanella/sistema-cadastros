@@ -159,6 +159,22 @@ export default function Person() {
             required
             maxLength={60}
           />
+          <FormInput
+            type="text"
+            control={form.control}
+            name="telefone"
+            label="Telefone"
+            required
+            maxLength={60}
+          />
+          <FormInput
+            type="text"
+            control={form.control}
+            name="email"
+            label="E-mail"
+            required
+            maxLength={60}
+          />
         </form>
       </Card>
       <Button className="mt-6" type="submit" disabled={loadingId || submitting}>
