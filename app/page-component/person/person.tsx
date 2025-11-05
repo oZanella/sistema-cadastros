@@ -18,6 +18,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { ChevronDown } from "lucide-react";
 
 export default function Person() {
   const [loadingId, setLoadingId] = useState(true);
@@ -96,23 +97,24 @@ export default function Person() {
           onSubmit={form.handleSubmit(handleSubmit)}
           className="grid grid-cols-4 gap-4 m-4 items-end"
         >
-          <div className="cursor-pointer">
-            <label htmlFor="tp">Tipo Pessoa</label>
+          <div className="flex flex-col">
+            <label
+              htmlFor="tp"
+              className="text-sm font-medium text-foreground mb-1"
+            >
+              Tipo Pessoa
+            </label>
 
             <Select>
-              <SelectTrigger className="w-full cursor-pointer">
+              <SelectTrigger className="w-full cursor-pointer group h-[40px]">
                 <SelectValue placeholder="Selecione..." />
+                <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground transition-none group-data-[state=open]:rotate-180" />
               </SelectTrigger>
+
               <SelectContent>
-                <SelectItem className="cursor-pointer" value="fisica">
-                  Física
-                </SelectItem>
-                <SelectItem className="cursor-pointer" value="juridica">
-                  Jurídica
-                </SelectItem>
-                <SelectItem className="cursor-pointer" value="estrangeiro">
-                  Estrangeiro
-                </SelectItem>
+                <SelectItem value="fisica">Física</SelectItem>
+                <SelectItem value="juridica">Jurídica</SelectItem>
+                <SelectItem value="estrangeiro">Estrangeiro</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -161,6 +163,7 @@ export default function Person() {
             required
             maxLength={60}
           />
+
           <FormInput
             type="text"
             control={form.control}
@@ -169,6 +172,7 @@ export default function Person() {
             required
             maxLength={60}
           />
+
           <FormInput
             type="text"
             control={form.control}
