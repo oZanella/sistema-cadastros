@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "@/components/form/form-input";
@@ -21,52 +21,36 @@ import {
 import { ChevronDown } from "lucide-react";
 
 export default function Person() {
-  const [loadingId, setLoadingId] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [tipoPessoa, setTipoPessoa] = useState<string>("");
 
   const form = useForm<PersonFormProps>({
     resolver: zodResolver(personZod),
     defaultValues: {
-      id: undefined,
       nome: "",
+      sobrenome: "",
       idade: undefined,
+      cnpjcpf: "",
+      email: "",
+      telefone: "",
+      tipo: undefined,
     },
   });
-
-  useEffect(() => {
-    async function fetchNextId() {
-      setLoadingId(true);
-
-      const { data, error } = await supabase
-        .from("pessoas")
-        .select("id")
-        .order("id", { ascending: false })
-        .limit(1);
-
-      if (error) {
-        console.error("Erro ao buscar ID:", error);
-        setLoadingId(false);
-        return;
-      }
-
-      const lastId = data?.[0]?.id ?? -1;
-      const nextId = lastId + 1;
-
-      form.setValue("id", nextId);
-      setLoadingId(false);
-    }
-
-    fetchNextId();
-  }, [form]);
 
   const handleSubmit = async (values: PersonFormProps) => {
     setSubmitting(true);
 
+    const cnpjcpfFinal = values.tipo === "E" ? "9999999999999" : values.cnpjcpf;
+
     const { error } = await supabase.from("pessoas").insert([
       {
-        id: values.id,
         nome: values.nome,
+        sobrenome: values.sobrenome,
         idade: values.idade,
+        tp: values.tipo,
+        cnpjcpf: cnpjcpfFinal,
+        email: values.email,
+        telefone: values.telefone,
       },
     ]);
 
@@ -76,14 +60,7 @@ export default function Person() {
     } else {
       alert("Pessoa cadastrada com sucesso!");
       form.reset();
-
-      const { data } = await supabase
-        .from("pessoas")
-        .select("id")
-        .order("id", { ascending: false })
-        .limit(1);
-      const nextId = (data?.[0]?.id ?? -1) + 1;
-      form.setValue("id", nextId);
+      setTipoPessoa("");
     }
 
     setSubmitting(false);
@@ -92,6 +69,7 @@ export default function Person() {
   return (
     <div className="relative w-full">
       <TitlePersonalizado>Cadastrar Pessoa</TitlePersonalizado>
+
       <Card>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -99,14 +77,33 @@ export default function Person() {
         >
           <div className="flex flex-col">
             <label
-              htmlFor="tp"
+              htmlFor="tipo"
               className="text-sm font-medium text-foreground mb-1"
             >
               Tipo Pessoa
             </label>
 
-            <Select>
-              <SelectTrigger className="w-full cursor-pointer group h-[40px]">
+            <Select
+              value={tipoPessoa}
+              onValueChange={(value) => {
+                setTipoPessoa(value);
+
+                const tipoMap = {
+                  fisica: "F",
+                  juridica: "J",
+                  estrangeiro: "E",
+                } as const;
+
+                form.setValue("tipo", tipoMap[value as keyof typeof tipoMap]);
+
+                if (value === "estrangeiro") {
+                  form.setValue("cnpjcpf", "9999999999999");
+                } else {
+                  form.setValue("cnpjcpf", "");
+                }
+              }}
+            >
+              <SelectTrigger className="w-full cursor-pointer group h-10">
                 <SelectValue placeholder="Selecione..." />
                 <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground transition-none group-data-[state=open]:rotate-180" />
               </SelectTrigger>
@@ -122,10 +119,11 @@ export default function Person() {
           <FormInput
             type="text"
             control={form.control}
-            name="cpfcnpj"
+            name="cnpjcpf"
             label="CPF/CNPJ"
             required
-            maxLength={60}
+            maxLength={14}
+            disabled={tipoPessoa === "estrangeiro"}
           />
 
           <FormInput
@@ -151,17 +149,7 @@ export default function Person() {
             name="idade"
             label="Idade"
             required
-            maxLength={2}
             className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-          />
-
-          <FormInput
-            type="text"
-            control={form.control}
-            name="dtcad"
-            label="Data Cadastro"
-            required
-            maxLength={60}
           />
 
           <FormInput
@@ -170,7 +158,7 @@ export default function Person() {
             name="telefone"
             label="Telefone"
             required
-            maxLength={60}
+            maxLength={11}
           />
 
           <FormInput
@@ -181,11 +169,14 @@ export default function Person() {
             required
             maxLength={60}
           />
+
+          <div className="col-span-4 flex justify-end mt-4">
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Enviando..." : "Enviar"}
+            </Button>
+          </div>
         </form>
       </Card>
-      <Button className="mt-6" type="submit" disabled={loadingId || submitting}>
-        {submitting ? "Enviando..." : "Enviar"}
-      </Button>
     </div>
   );
 }
