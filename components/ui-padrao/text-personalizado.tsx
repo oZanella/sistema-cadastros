@@ -9,5 +9,5 @@ export default function TitlePersonalizado({
   children,
   className = "",
 }: TitlePersonalizadoProps) {
-  return <h1 className={`text-2xl font-bold mb-4 ${className}`}>{children}</h1>;
+  return <h1 className={`text-2xl ${className}`}>{children}</h1>;
 }

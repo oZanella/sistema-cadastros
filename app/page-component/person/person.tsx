@@ -19,6 +19,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { ChevronDown } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 export default function Person() {
   const [submitting, setSubmitting] = useState(false);
@@ -28,7 +29,6 @@ export default function Person() {
     resolver: zodResolver(personZod),
     defaultValues: {
       nome: "",
-      sobrenome: "",
       idade: undefined,
       cnpjcpf: "",
       email: "",
@@ -45,7 +45,6 @@ export default function Person() {
     const { error } = await supabase.from("pessoas").insert([
       {
         nome: values.nome,
-        sobrenome: values.sobrenome,
         idade: values.idade,
         tp: values.tipo,
         cnpjcpf: cnpjcpfFinal,
@@ -68,115 +67,158 @@ export default function Person() {
 
   return (
     <div className="relative w-full">
-      <TitlePersonalizado>Cadastrar Pessoa</TitlePersonalizado>
+      <div>
+        <TitlePersonalizado className="font-bold mb-4">
+          Cadastrar Pessoa
+        </TitlePersonalizado>
 
-      <Card>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid grid-cols-4 gap-4 m-4 items-end"
-        >
-          <div className="flex flex-col">
-            <label
-              htmlFor="tipo"
-              className="text-sm font-medium text-foreground mb-1"
-            >
-              Tipo Pessoa
-            </label>
+        <Card>
+          <TitlePersonalizado className="text-base font-semibold text-blue-500 ml-4">
+            Dados Principais
+          </TitlePersonalizado>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="grid grid-cols-3 gap-4 ml-4 items-end"
+          >
+            <div className="flex flex-col">
+              <label
+                htmlFor="tipo"
+                className="text-sm font-medium text-foreground mb-1"
+              >
+                Tipo Pessoa
+              </label>
 
-            <Select
-              value={tipoPessoa}
-              onValueChange={(value) => {
-                setTipoPessoa(value);
+              <Select
+                value={tipoPessoa}
+                onValueChange={(value) => {
+                  setTipoPessoa(value);
 
-                const tipoMap = {
-                  fisica: "F",
-                  juridica: "J",
-                  estrangeiro: "E",
-                } as const;
+                  const tipoMap = {
+                    fisica: "F",
+                    juridica: "J",
+                    estrangeiro: "E",
+                  } as const;
 
-                form.setValue("tipo", tipoMap[value as keyof typeof tipoMap]);
+                  form.setValue("tipo", tipoMap[value as keyof typeof tipoMap]);
 
-                if (value === "estrangeiro") {
-                  form.setValue("cnpjcpf", "9999999999999");
-                } else {
-                  form.setValue("cnpjcpf", "");
-                }
-              }}
-            >
-              <SelectTrigger className="w-full cursor-pointer group h-10">
-                <SelectValue placeholder="Selecione..." />
-                <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground transition-none group-data-[state=open]:rotate-180" />
-              </SelectTrigger>
+                  if (value === "estrangeiro") {
+                    form.setValue("cnpjcpf", "9999999999999");
+                  } else {
+                    form.setValue("cnpjcpf", "");
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full cursor-pointer group h-10">
+                  <SelectValue placeholder="Selecione..." />
+                  <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground transition-none group-data-[state=open]:rotate-180" />
+                </SelectTrigger>
 
-              <SelectContent>
-                <SelectItem value="fisica">Física</SelectItem>
-                <SelectItem value="juridica">Jurídica</SelectItem>
-                <SelectItem value="estrangeiro">Estrangeiro</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                <SelectContent>
+                  <SelectItem value="fisica">Física</SelectItem>
+                  <SelectItem value="juridica">Jurídica</SelectItem>
+                  <SelectItem value="estrangeiro">Estrangeiro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <FormInput
-            type="text"
-            control={form.control}
-            name="cnpjcpf"
-            label="CPF/CNPJ"
-            required
-            maxLength={14}
-            disabled={tipoPessoa === "estrangeiro"}
-          />
+            <FormInput
+              type="text"
+              control={form.control}
+              name="cnpjcpf"
+              label="CPF/CNPJ"
+              required
+              maxLength={14}
+              disabled={tipoPessoa === "estrangeiro"}
+            />
 
-          <FormInput
-            control={form.control}
-            name="nome"
-            label="Nome"
-            required
-            maxLength={60}
-          />
+            <FormInput
+              control={form.control}
+              name="nome"
+              label="Nome"
+              required
+              maxLength={60}
+            />
 
-          <FormInput
-            type="text"
-            control={form.control}
-            name="sobrenome"
-            label="Sobrenome"
-            required
-            maxLength={60}
-          />
+            <FormInput
+              type="number"
+              control={form.control}
+              name="idade"
+              label="Idade"
+              required
+              className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
 
-          <FormInput
-            type="number"
-            control={form.control}
-            name="idade"
-            label="Idade"
-            required
-            className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-          />
+            <FormInput
+              type="text"
+              control={form.control}
+              name="telefone"
+              label="Telefone"
+              required
+              maxLength={11}
+            />
 
-          <FormInput
-            type="text"
-            control={form.control}
-            name="telefone"
-            label="Telefone"
-            required
-            maxLength={11}
-          />
+            <FormInput
+              type="text"
+              control={form.control}
+              name="email"
+              label="E-mail"
+              required
+              maxLength={60}
+            />
+          </form>
+        </Card>
+      </div>
 
-          <FormInput
-            type="text"
-            control={form.control}
-            name="email"
-            label="E-mail"
-            required
-            maxLength={60}
-          />
+      <div className="relative w-full mt-4">
+        <Card className="p-6">
+          <TitlePersonalizado className="text-base font-semibold text-blue-500 mb-4">
+            Tipo de Pessoa
+          </TitlePersonalizado>
 
-          <div className="col-span-4 flex justify-end mt-4">
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Enviando..." : "Enviar"}
-            </Button>
-          </div>
-        </form>
-      </Card>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <div className="grid grid-cols-4 gap-4">
+              {[
+                {
+                  title: "Fornecedor",
+                  desc: "Marque se o cliente também atua como fornecedor de produtos ou serviços.",
+                },
+                {
+                  title: "Não contribuinte",
+                  desc: "Indica que o cliente é consumidor final e não contribui com ICMS.",
+                },
+                {
+                  title: "Simples Nacional",
+                  desc: "Indica que o cliente é optante pelo regime tributário do Simples Nacional.",
+                },
+                {
+                  title: "Situação",
+                  desc: "Define se o cliente está ativo ou inativo no sistema.",
+                },
+              ].map((item, index) => (
+                <Card key={index} className="p-4 flex flex-col justify-between">
+                  <div className="flex items-start justify-between">
+                    <div className="max-w-[85%]">
+                      <p className="text-sm font-semibold">{item.title}</p>
+                      <p className="text-xs text-black/70 leading-snug">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <div className="flex items-start mt-2">
+                      <Switch />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </form>
+        </Card>
+      </div>
+
+      <div className="col-span-3 flex justify-end mt-4">
+        <Button type="submit" disabled={submitting}>
+          {submitting ? "Enviando..." : "Enviar"}
+        </Button>
+      </div>
     </div>
   );
 }
