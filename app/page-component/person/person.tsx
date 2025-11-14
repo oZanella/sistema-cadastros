@@ -72,13 +72,13 @@ export default function Person() {
           Cadastrar Pessoa
         </TitlePersonalizado>
 
-        <Card>
-          <TitlePersonalizado className="text-base font-semibold text-blue-500 ml-4">
+        <Card className="p-4">
+          <TitlePersonalizado className="text-base font-semibold text-blue-500 ">
             Dados Principais
           </TitlePersonalizado>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-3 gap-4 ml-4 items-end"
+            className="grid grid-cols-3 gap-4 items-end"
           >
             <div className="flex flex-col">
               <label
@@ -169,13 +169,18 @@ export default function Person() {
         </Card>
       </div>
 
-      <div className="relative w-full mt-4">
-        <Card className="p-6">
-          <TitlePersonalizado className="text-base font-semibold text-blue-500 mb-4">
+      <div
+        className="relative w-full mt-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <Card>
+          <TitlePersonalizado className="text-base font-semibold text-blue-500 ml-4">
             Tipo de Pessoa
           </TitlePersonalizado>
-
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="grid ml-4 mr-4"
+          >
             <div className="grid grid-cols-4 gap-4">
               {[
                 {
@@ -197,9 +202,9 @@ export default function Person() {
               ].map((item, index) => (
                 <Card key={index} className="p-4 flex flex-col justify-between">
                   <div className="flex items-start justify-between">
-                    <div className="max-w-[85%]">
-                      <p className="text-sm font-semibold">{item.title}</p>
-                      <p className="text-xs text-black/70 leading-snug">
+                    <div>
+                      <p className="text-mb font-semibold">{item.title}</p>
+                      <p className="text-xs text-black/70 dark:text-white/70 leading-snug">
                         {item.desc}
                       </p>
                     </div>
@@ -210,14 +215,13 @@ export default function Person() {
                 </Card>
               ))}
             </div>
+            <div className="col-span-4 flex justify-end mt-4">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Enviando..." : "Enviar"}
+              </Button>
+            </div>
           </form>
         </Card>
-      </div>
-
-      <div className="col-span-3 flex justify-end mt-4">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Enviando..." : "Enviar"}
-        </Button>
       </div>
     </div>
   );
