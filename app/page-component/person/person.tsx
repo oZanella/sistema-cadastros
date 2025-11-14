@@ -65,6 +65,25 @@ export default function Person() {
     setSubmitting(false);
   };
 
+  const itens = [
+    {
+      title: "Fornecedor",
+      desc: "Marque se o cliente também atua como fornecedor de produtos ou serviços.",
+    },
+    {
+      title: "Não contribuinte",
+      desc: "Indica que o cliente é consumidor final e não contribui com ICMS.",
+    },
+    {
+      title: "Simples Nacional",
+      desc: "Indica que o cliente é optante pelo regime tributário do Simples Nacional.",
+    },
+    {
+      title: "Situação",
+      desc: "Define se o cliente está ativo ou inativo no sistema.",
+    },
+  ];
+
   return (
     <div className="relative w-full">
       <div>
@@ -78,7 +97,7 @@ export default function Person() {
           </TitlePersonalizado>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-3 gap-4 items-end"
+            className="grid md:grid-cols-3 gap-4 items-end"
           >
             <div className="flex flex-col">
               <label
@@ -169,53 +188,39 @@ export default function Person() {
         </Card>
       </div>
 
-      <div
-        className="relative w-full mt-4"
-        onSubmit={form.handleSubmit(handleSubmit)}
-      >
+      <div className="relative w-full mt-4">
         <Card>
           <TitlePersonalizado className="text-base font-semibold text-blue-500 ml-4">
             Tipo de Pessoa
           </TitlePersonalizado>
+
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid ml-4 mr-4"
+            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4"
           >
-            <div className="grid grid-cols-4 gap-4">
-              {[
-                {
-                  title: "Fornecedor",
-                  desc: "Marque se o cliente também atua como fornecedor de produtos ou serviços.",
-                },
-                {
-                  title: "Não contribuinte",
-                  desc: "Indica que o cliente é consumidor final e não contribui com ICMS.",
-                },
-                {
-                  title: "Simples Nacional",
-                  desc: "Indica que o cliente é optante pelo regime tributário do Simples Nacional.",
-                },
-                {
-                  title: "Situação",
-                  desc: "Define se o cliente está ativo ou inativo no sistema.",
-                },
-              ].map((item, index) => (
-                <Card key={index} className="p-4 flex flex-col justify-between">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-mb font-semibold">{item.title}</p>
-                      <p className="text-xs text-black/70 dark:text-white/70 leading-snug">
-                        {item.desc}
-                      </p>
-                    </div>
-                    <div className="flex items-start mt-2">
-                      <Switch />
-                    </div>
+            {itens.map((item, index) => (
+              <Card
+                key={index}
+                className="p-4 flex flex-col justify-between overflow-hidden"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 flex-wrap">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-mb font-semibold break-words">
+                      {item.title}
+                    </p>
+                    <p className="text-xs text-black/70 dark:text-white/70 leading-snug break-words">
+                      {item.desc}
+                    </p>
                   </div>
-                </Card>
-              ))}
-            </div>
-            <div className="col-span-4 flex justify-end mt-4">
+
+                  <div className="flex justify-end items-center mt-2 sm:mt-0">
+                    <Switch />
+                  </div>
+                </div>
+              </Card>
+            ))}
+
+            <div className="md:col-span-4 flex justify-end mt-2">
               <Button type="submit" disabled={submitting}>
                 {submitting ? "Enviando..." : "Enviar"}
               </Button>
