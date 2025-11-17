@@ -86,19 +86,17 @@ export default function Person() {
 
   return (
     <div className="relative w-full">
-      <div>
-        <TitlePersonalizado className="font-bold mb-4">
-          Cadastrar Pessoa
-        </TitlePersonalizado>
+      <TitlePersonalizado className="font-bold mb-4">
+        Cadastrar Pessoa
+      </TitlePersonalizado>
 
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Card className="p-4">
           <TitlePersonalizado className="text-base font-semibold text-blue-500 ">
             Dados Principais
           </TitlePersonalizado>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid md:grid-cols-3 gap-4 items-end"
-          >
+
+          <div className="grid md:grid-cols-3 gap-4 items-end">
             <div className="flex flex-col">
               <label
                 htmlFor="tipo"
@@ -184,20 +182,15 @@ export default function Person() {
               required
               maxLength={60}
             />
-          </form>
+          </div>
         </Card>
-      </div>
 
-      <div className="relative w-full mt-4">
-        <Card>
+        <Card className="mt-4">
           <TitlePersonalizado className="text-base font-semibold text-blue-500 ml-4">
             Tipo de Pessoa
           </TitlePersonalizado>
 
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             {itens.map((item, index) => (
               <Card
                 key={index}
@@ -219,15 +212,15 @@ export default function Person() {
                 </div>
               </Card>
             ))}
-
-            <div className="md:col-span-4 flex justify-end mt-2">
-              <Button type="submit" disabled={submitting}>
-                {submitting ? "Enviando..." : "Enviar"}
-              </Button>
-            </div>
-          </form>
+          </div>
         </Card>
-      </div>
+
+        <div className="flex justify-end mt-4">
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Enviando..." : "Enviar"}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }
