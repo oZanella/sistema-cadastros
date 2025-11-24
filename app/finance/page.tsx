@@ -1,7 +1,14 @@
-export default function Finance() {
+import Receive from "../page-component/finance/accounts";
+
+export const metadata = {
+  title: "Cadastro de Pessoas",
+  description: "Cadastro",
+};
+
+export default async function CadFinance() {
   return (
-    <div className="p-6 bg-orange-600">
-      <h1 className="text-2xl font-bold">CR7 LARANJA</h1>
-    </div>
+    <>
+      <Receive />
+    </>
   );
 }
