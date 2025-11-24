@@ -3,15 +3,9 @@
 import { useState } from "react";
 
 import { Card } from "@/components/ui/card";
-import { Pencil, Trash, Filter, Columns, Plus } from "lucide-react";
+import { Pencil, Trash, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
 
 import {
   Table,
