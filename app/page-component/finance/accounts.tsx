@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash, Plus } from "lucide-react";
@@ -16,43 +16,45 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
+import { supabase } from "@/lib/supabaseClient";
+import { FinanceListagemProps, financeZod } from "@/app/finance/schemas";
+
+function formatDate(date: string) {
+  const [y, m, d] = date.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function formatValor(v: number) {
+  return v.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+}
+
 export default function PessoaListagem() {
   const [pesquisa, setPesquisa] = useState("");
+  const [dados, setDados] = useState<FinanceListagemProps[]>([]);
 
-  const dados = [
-    {
-      id: 1,
-      tipo: "Despesa",
-      data: "13/12/2025",
-      nome: "Henrique Zanella",
-      historico: "Despesas de Escritório",
-      valor: "54,00",
-    },
-    {
-      id: 2,
-      tipo: "Receita",
-      data: "05/12/2025",
-      nome: "Henrique Zanella",
-      historico: "Salário",
-      valor: "6.000,00",
-    },
-    {
-      id: 3,
-      tipo: "Despesa",
-      data: "07/12/2025",
-      nome: "Henrique Zanella",
-      historico: "Cartão de Crédito",
-      valor: "2.534,00",
-    },
-    {
-      id: 4,
-      tipo: "Receita",
-      data: "15/12/2025",
-      nome: "Henrique Zanella",
-      historico: "Telefone",
-      valor: "88,90",
-    },
-  ];
+  useEffect(() => {
+    async function load() {
+      const { data, error } = await supabase
+        .from("finance")
+        .select("*")
+        .order("data", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const parsed = data.map((item) => financeZod.parse(item));
+
+      setDados(parsed);
+    }
+
+    load();
+  }, []);
+
+  const dadosFiltrados = dados.filter((item) =>
+    item.nome.toLowerCase().includes(pesquisa.toLowerCase())
+  );
 
   return (
     <div className="space-y-4">
@@ -81,11 +83,12 @@ export default function PessoaListagem() {
               <TableHead>Nome</TableHead>
               <TableHead>Histórico</TableHead>
               <TableHead>Valor</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {dados.map((item) => (
+            {dadosFiltrados.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
                   {item.tipo === "Despesa" ? (
@@ -99,10 +102,10 @@ export default function PessoaListagem() {
                   )}
                 </TableCell>
 
-                <TableCell>{item.data}</TableCell>
+                <TableCell>{formatDate(item.data)}</TableCell>
                 <TableCell>{item.nome}</TableCell>
                 <TableCell>{item.historico}</TableCell>
-                <TableCell>R$ {item.valor}</TableCell>
+                <TableCell>R$ {formatValor(item.valor)}</TableCell>
 
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-3">
