@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import {
   Table,
   TableHeader,
@@ -15,9 +13,9 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-
 import { supabase } from "@/lib/supabaseClient";
 import { FinanceListagemProps, financeZod } from "@/app/finance/schemas";
+import router from "next/router";
 
 function formatDate(date: string) {
   const [y, m, d] = date.split("-");
@@ -31,22 +29,35 @@ function formatValor(v: number) {
 export default function PessoaListagem() {
   const [pesquisa, setPesquisa] = useState("");
   const [dados, setDados] = useState<FinanceListagemProps[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const { data, error } = await supabase
-        .from("finance")
-        .select("*")
-        .order("data", { ascending: false });
+      try {
+        setLoading(true);
 
-      if (error) {
-        console.error(error);
-        return;
+        const { data, error } = await supabase
+          .from("finance")
+          .select("*")
+          .order("data", { ascending: false });
+
+        if (error) {
+          console.error("Erro ao buscar dados:", error);
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          setDados([]);
+          return;
+        }
+
+        const parsed = data.map((item) => financeZod.parse(item));
+        setDados(parsed);
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
+      } finally {
+        setLoading(false);
       }
-
-      const parsed = data.map((item) => financeZod.parse(item));
-
-      setDados(parsed);
     }
 
     load();
@@ -66,15 +77,16 @@ export default function PessoaListagem() {
           onChange={(e) => setPesquisa(e.target.value)}
         />
 
-        <div>
-          <Button className="bg-green-600 hover:bg-green-700">
-            <Plus />
-            Adicionar
-          </Button>
-        </div>
+        <Button
+          onClick={() => router.back()}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          <Plus />
+          Adicionar
+        </Button>
       </div>
 
-      <Card className="p-2 cursor-pointer">
+      <Card className="p-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -88,33 +100,49 @@ export default function PessoaListagem() {
           </TableHeader>
 
           <TableBody>
-            {dadosFiltrados.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  {item.tipo === "Despesa" ? (
-                    <div className="px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-bold w-fit">
-                      DESPESA
-                    </div>
-                  ) : (
-                    <div className="px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs font-bold w-fit">
-                      RECEITA
-                    </div>
-                  )}
-                </TableCell>
-
-                <TableCell>{formatDate(item.data)}</TableCell>
-                <TableCell>{item.nome}</TableCell>
-                <TableCell>{item.historico}</TableCell>
-                <TableCell>R$ {formatValor(item.valor)}</TableCell>
-
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-3">
-                    <Pencil className="w-4 h-4 cursor-pointer text-blue-600" />
-                    <Trash className="w-4 h-4 cursor-pointer text-red-600" />
-                  </div>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-gray-500">
+                  Carregando...
                 </TableCell>
               </TableRow>
-            ))}
+            ) : dadosFiltrados.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-gray-500">
+                  {pesquisa
+                    ? "Nenhum resultado para esta pesquisa"
+                    : "Nenhum registro cadastrado"}
+                </TableCell>
+              </TableRow>
+            ) : (
+              dadosFiltrados.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    {item.tipo === "Despesa" ? (
+                      <div className="px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-bold w-fit">
+                        DESPESA
+                      </div>
+                    ) : (
+                      <div className="px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs font-bold w-fit">
+                        RECEITA
+                      </div>
+                    )}
+                  </TableCell>
+
+                  <TableCell>{formatDate(item.data)}</TableCell>
+                  <TableCell>{item.nome}</TableCell>
+                  <TableCell>{item.historico || "-"}</TableCell>
+                  <TableCell>R$ {formatValor(item.valor)}</TableCell>
+
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-3">
+                      <Pencil className="w-4 h-4 cursor-pointer text-blue-600" />
+                      <Trash className="w-4 h-4 cursor-pointer text-red-600" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </Card>
