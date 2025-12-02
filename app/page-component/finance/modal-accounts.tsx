@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,15 +11,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Calendar as CalendarIcon } from "lucide-react";
 
-// Tipos
 type FormData = {
   tipo: string;
   data: string;
@@ -42,6 +39,27 @@ export default function FinanceEditModal({
   onFormChange,
   onSave,
 }: FinanceEditModalProps) {
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const selectedDate = formData.data ? new Date(formData.data) : undefined;
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  // Fecha o calendário ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node)
+      ) {
+        setCalendarOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
@@ -52,29 +70,49 @@ export default function FinanceEditModal({
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="tipo">Tipo</Label>
-            <Select
-              value={formData.tipo}
-              onValueChange={(value) => onFormChange("tipo", value)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Receita">Receita</SelectItem>
-                <SelectItem value="Despesa">Despesa</SelectItem>
-              </SelectContent>
-            </Select>
+            <Input value={formData.tipo} readOnly />
           </div>
 
-          <div className="grid gap-2">
+          <div className="grid gap-2 relative">
             <Label htmlFor="data">Data</Label>
-            <Input
-              id="data"
-              type="date"
-              className="w-full"
-              value={formData.data}
-              onChange={(e) => onFormChange("data", e.target.value)}
-            />
+            <div className="relative w-full">
+              <Input
+                id="data"
+                className="w-full pr-10"
+                value={
+                  selectedDate
+                    ? format(selectedDate, "dd/MM/yyyy", { locale: ptBR })
+                    : ""
+                }
+                readOnly
+              />
+              <CalendarIcon
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+                onClick={() => setCalendarOpen(!calendarOpen)}
+                size={20}
+              />
+            </div>
+
+            {calendarOpen && (
+              <div
+                ref={calendarRef}
+                className="absolute z-50 mt-2 left-0"
+                style={{ minWidth: "250px" }}
+              >
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    if (date) {
+                      onFormChange("data", date.toISOString());
+                      setCalendarOpen(false);
+                    }
+                  }}
+                  className="rounded-lg border bg-white"
+                  locale={ptBR}
+                />
+              </div>
+            )}
           </div>
 
           <div className="grid gap-2">
