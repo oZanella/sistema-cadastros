@@ -157,12 +157,13 @@ export default function Person() {
             />
 
             <FormInput
-              type="number"
+              type="text"
               control={form.control}
               name="idade"
               label="Idade"
               required
               className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              maxLength={3}
             />
 
             <FormInput

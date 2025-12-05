@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from "react";
@@ -26,6 +27,8 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "../ui/collapsible";
+import Image from "next/image";
+import logo from "public/images/logo-zynk.png";
 
 const fixItems = [
   {
@@ -87,6 +90,22 @@ export function AppSidebar() {
                 open={geralOpen}
                 onOpenChange={setGeralOpen}
               >
+                <SidebarMenuItem>
+                  <div className="flex items-center gap-3 px-3 py-4 border-b">
+                    <div className="h-9 w-9 rounded-full overflow-hidden flex items-center justify-center">
+                      <Image
+                        src="/images/logo-zynk.png"
+                        alt="Logo Zynk"
+                        width={36}
+                        height={36}
+                        className="object-contain"
+                      />
+                    </div>
+
+                    <span className="font-semibold text-lg">Zynk Sistema</span>
+                  </div>
+                </SidebarMenuItem>
+
                 <SidebarMenuItem>
                   <div className="flex items-center gap-2 px-2 py-1.5">
                     <span>Geral</span>

@@ -9,7 +9,10 @@ export const personZod = z
       .min(1, "Nome é obrigatório")
       .max(60, "Nome não pode ter mais de 60 caracteres"),
 
-    idade: z.number().min(1, "Idade inválida, deve ser maior que zero"),
+    idade: z
+      .string()
+      .min(1, "Idade inválida, deve ser maior que zero")
+      .max(3, "Máximo de 3 caracteres"),
 
     tipo: z
       .enum(["F", "J", "E"])

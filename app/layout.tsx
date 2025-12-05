@@ -66,7 +66,7 @@ export default function RootLayout({
               <SidebarInset>
                 <header className="flex h-13 shrink-0 items-center gap-2 border-b px-4">
                   <SidebarTrigger />
-                  <div className="flex items-center w-full ml-1 justify-between">
+                  <div className="flex items-center w-full ml-1 justify-between cursor-default">
                     <h1>Empresa de Testes</h1>
                   </div>
                   <div className="flex flex-row gap-2">

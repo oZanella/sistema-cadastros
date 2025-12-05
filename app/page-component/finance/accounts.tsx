@@ -122,8 +122,8 @@ export default function FinanceListagem() {
             onChange={(e) => setPesquisa(e.target.value)}
           />
 
-          <Button className="bg-green-600 hover:bg-green-700 ">
-            <Plus className="w-4 h-4 mr-2" />
+          <Button className="bg-green-600 hover:bg-green-700 cursor-pointer ">
+            <Plus className="w-4 h-4 " />
             Adicionar
           </Button>
         </div>
