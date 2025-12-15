@@ -70,7 +70,7 @@ export default function FinanceEditModal({
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="tipo">Tipo</Label>
-            <Input value={formData.tipo} readOnly />
+            <Input className="" disabled value={formData.tipo} readOnly />
           </div>
 
           <div className="grid gap-2 relative">
