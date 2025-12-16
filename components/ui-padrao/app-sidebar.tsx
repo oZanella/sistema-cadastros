@@ -28,7 +28,6 @@ import {
   CollapsibleContent,
 } from "../ui/collapsible";
 import Image from "next/image";
-import logo from "public/images/logo-zynk.png";
 
 const fixItems = [
   {
@@ -40,11 +39,6 @@ const fixItems = [
 
 const cadastroItems = [
   {
-    title: "Pessoas",
-    url: "/person",
-    icon: User,
-  },
-  {
     title: "Produtos",
     url: "/product",
     icon: Package,
@@ -53,6 +47,17 @@ const cadastroItems = [
     title: "Financeiro",
     url: "/finance",
     icon: CoinsIcon,
+  },
+];
+
+const pessoasItems = [
+  {
+    title: "Clientes",
+    url: "/person",
+  },
+  {
+    title: "Fornecedores",
+    url: "/supplier",
   },
 ];
 
@@ -78,6 +83,7 @@ export function AppSidebar() {
   const [geralOpen, setGeralOpen] = useState(true);
   const [CadastroOpen, setCadastroOpen] = useState(true);
   const [VendasOpen, setVendasOpen] = useState(true);
+  const [PessoasOpen, setPessoasOpen] = useState(false);
 
   return (
     <Sidebar>
@@ -112,19 +118,21 @@ export function AppSidebar() {
                   </div>
 
                   <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {fixItems.map((item) => (
-                        <SidebarMenuSubItem key={item.title}>
-                          <Link
-                            href={item.url}
-                            className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-                          >
-                            <item.icon className="h-4 w-4" />
-                            <span>{item.title}</span>
-                          </Link>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {fixItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <Link
+                              href={item.url}
+                              className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                            >
+                              <item.icon className="h-4 w-4" />
+                              <span>{item.title}</span>
+                            </Link>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
@@ -148,6 +156,42 @@ export function AppSidebar() {
 
                   <CollapsibleContent>
                     <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <Collapsible
+                          open={PessoasOpen}
+                          onOpenChange={setPessoasOpen}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <button className="flex w-full items-center justify-between px-2 py-1.5 hover:bg-accent rounded-md transition-colors">
+                              <div className="flex items-center gap-2">
+                                <User className="h-4 w-4" />
+                                <span>Pessoas</span>
+                              </div>
+
+                              <ChevronRight
+                                className={`h-4 w-4 transition-transform duration-200 ${
+                                  PessoasOpen ? "rotate-90" : ""
+                                }`}
+                              />
+                            </button>
+                          </CollapsibleTrigger>
+
+                          <CollapsibleContent>
+                            <SidebarMenuSub className="ml-4">
+                              {pessoasItems.map((item) => (
+                                <SidebarMenuSubItem key={item.title}>
+                                  <Link
+                                    href={item.url}
+                                    className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                                  >
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </SidebarMenuSubItem>
                       {cadastroItems.map((item) => (
                         <SidebarMenuSubItem key={item.title}>
                           <Link

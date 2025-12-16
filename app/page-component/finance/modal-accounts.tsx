@@ -43,7 +43,7 @@ export default function FinanceEditModal({
   const selectedDate = formData.data ? new Date(formData.data) : undefined;
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  // Fecha o calendário ao clicar fora
+  
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
