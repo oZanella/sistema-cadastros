@@ -1,4 +1,4 @@
-import FinancePay from "../page-component/finance/pay/accounts-pay";
+import FinancePay from "@/app/page-component/finance/pay/accounts-pay";
 
 export const metadata = {
   title: "Cadastro de Pessoas",

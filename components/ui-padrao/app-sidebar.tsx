@@ -54,11 +54,11 @@ const pessoasItems = [
 const produtosSubItems = [
   {
     title: "Produtos",
-    url: "/product",
+    url: "/product/products",
   },
   {
     title: "Unidade de Medida",
-    url: "/product/unit",
+    url: "/product/units",
   },
   {
     title: "Marcas",
@@ -73,12 +73,12 @@ const produtosSubItems = [
 const financeiroItems = [
   {
     title: "Contas a Pagar",
-    url: "/finance",
+    url: "/finance/pay",
     icon: CoinsIcon,
   },
   {
     title: "Contas a Receber",
-    url: "/finance",
+    url: "/finance/receive",
     icon: CoinsIcon,
   },
 ];

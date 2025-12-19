@@ -21,7 +21,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
-export default function Products() {
+export default function Subtypes() {
   const [submitting, setSubmitting] = useState(false);
   const [unidade, setUnidade] = useState<string>("");
   const [marcas, setMarcas] = useState<string>("");
@@ -86,7 +86,7 @@ export default function Products() {
     <div className="relative w-full">
       <div>
         <TitlePersonalizado className="font-bold mb-4">
-          Cadastrar Produto
+          Subtipos
         </TitlePersonalizado>
 
         <form onSubmit={form.handleSubmit(handleSubmit)}>

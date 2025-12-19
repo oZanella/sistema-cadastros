@@ -5,11 +5,12 @@ import { Card } from "@/components/ui/card";
 import { Pencil, Trash, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import FinanceEditModal from "./modal-accounts";
+import FinanceEditModal from "../modal-accounts";
+import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
 
 type FinanceItem = {
   id: number;
-  tipo: "Despesa" | "Receita";
+  tipo: "Aberto" | "Fechado" | "Parcial";
   data: string;
   nome: string;
   historico: string;
@@ -25,7 +26,7 @@ function formatValor(v: number) {
   return v.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 }
 
-export default function FinanceListagem() {
+export default function FinanceReceive() {
   const [pesquisa, setPesquisa] = useState("");
   const [dados, setDados] = useState<FinanceItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -44,15 +45,15 @@ export default function FinanceListagem() {
     setDados([
       {
         id: 1,
-        tipo: "Receita",
-        data: "2024-01-15",
-        nome: "Salário",
-        historico: "Pagamento mensal",
-        valor: 5000.0,
+        tipo: "Aberto",
+        data: "2023-04-27",
+        nome: "Venda",
+        historico: "",
+        valor: 3920.0,
       },
       {
         id: 2,
-        tipo: "Despesa",
+        tipo: "Fechado",
         data: "2024-01-20",
         nome: "Aluguel",
         historico: "Pagamento aluguel Janeiro",
@@ -60,11 +61,91 @@ export default function FinanceListagem() {
       },
       {
         id: 3,
-        tipo: "Despesa",
+        tipo: "Aberto",
         data: "2024-01-22",
         nome: "Supermercado",
         historico: "Compras mensais",
         valor: 800.5,
+      },
+      {
+        id: 4,
+        tipo: "Parcial",
+        data: "2024-02-05",
+        nome: "Venda à Vista",
+        historico: "Venda de mercadorias balcão",
+        valor: 1250.0,
+      },
+      {
+        id: 5,
+        tipo: "Fechado",
+        data: "2024-02-10",
+        nome: "Venda Parcelada",
+        historico: "1ª parcela venda cliente João Silva",
+        valor: 980.0,
+      },
+      {
+        id: 6,
+        tipo: "Aberto",
+        data: "2024-02-15",
+        nome: "Prestação de Serviço",
+        historico: "Serviço de manutenção mensal",
+        valor: 600.0,
+      },
+      {
+        id: 7,
+        tipo: "Fechado",
+        data: "2024-02-18",
+        nome: "Mensalidade",
+        historico: "Mensalidade sistema fevereiro",
+        valor: 299.9,
+      },
+      {
+        id: 8,
+        tipo: "Aberto",
+        data: "2024-02-20",
+        nome: "Venda Online",
+        historico: "Pedido e-commerce #4587",
+        valor: 1840.75,
+      },
+      {
+        id: 9,
+        tipo: "Aberto",
+        data: "2024-02-22",
+        nome: "Contrato",
+        historico: "Recebimento contrato empresa ABC Ltda",
+        valor: 3500.0,
+      },
+      {
+        id: 10,
+        tipo: "Aberto",
+        data: "2024-02-25",
+        nome: "Licenciamento",
+        historico: "Licença anual software",
+        valor: 1200.0,
+      },
+      {
+        id: 11,
+        tipo: "Parcial",
+        data: "2024-02-27",
+        nome: "Comissão",
+        historico: "Comissão sobre vendas janeiro",
+        valor: 450.0,
+      },
+      {
+        id: 12,
+        tipo: "Parcial",
+        data: "2024-03-01",
+        nome: "Venda a Prazo",
+        historico: "Venda faturada cliente XPTO",
+        valor: 2100.0,
+      },
+      {
+        id: 13,
+        tipo: "Aberto",
+        data: "2024-03-05",
+        nome: "Recuperação de Crédito",
+        historico: "Pagamento de título em atraso",
+        valor: 760.0,
       },
     ]);
   }, []);
@@ -93,7 +174,7 @@ export default function FinanceListagem() {
         item.id === editingItem.id
           ? {
               ...item,
-              tipo: formData.tipo as "Despesa" | "Receita",
+              tipo: formData.tipo as "Aberto" | "Fechado" | "Parcial",
               data: formData.data,
               nome: formData.nome,
               historico: formData.historico,
@@ -113,6 +194,7 @@ export default function FinanceListagem() {
 
   return (
     <div className="min-h-screen">
+      <TitlePersonalizado>Contas a Receber</TitlePersonalizado>
       <div className="max-w-full mx-auto space-y-4">
         <div className="flex justify-between items-center">
           <Input
@@ -148,7 +230,6 @@ export default function FinanceListagem() {
                   <th className="text-left py-3 px-4 font-semibold text-sm">
                     Valor
                   </th>
-                  <th className="text-right py-3 px-4 font-semibold text-sm"></th>
                 </tr>
               </thead>
 
@@ -174,13 +255,17 @@ export default function FinanceListagem() {
                       className="border-b hover:bg-gray-50 cursor-default"
                     >
                       <td className="py-3 px-4">
-                        {item.tipo === "Despesa" ? (
-                          <div className="px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-bold w-fit">
-                            DESPESA
+                        {item.tipo === "Aberto" ? (
+                          <div className="px-2 py-1 rounded bg-gray-500 text-white text-xs font-bold w-fit">
+                            ABERTO
+                          </div>
+                        ) : item.tipo === "Fechado" ? (
+                          <div className="px-2 py-1 rounded bg-green-700 text-white text-xs font-bold w-fit">
+                            FECHADO
                           </div>
                         ) : (
-                          <div className="px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs font-bold w-fit">
-                            RECEITA
+                          <div className="px-2 py-1 rounded bg-blue-500 text-white text-xs font-bold w-fit">
+                            PARCIAL
                           </div>
                         )}
                       </td>
@@ -189,9 +274,7 @@ export default function FinanceListagem() {
                         {formatDate(item.data)}
                       </td>
                       <td className="py-3 px-4 text-sm">{item.nome}</td>
-                      <td className="py-3 px-4 text-sm">
-                        {item.historico || "-"}
-                      </td>
+                      <td className="py-3 px-4 text-sm">{item.historico}</td>
                       <td className="py-3 px-4 text-sm">
                         R$ {formatValor(item.valor)}
                       </td>

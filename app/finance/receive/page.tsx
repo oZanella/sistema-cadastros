@@ -1,4 +1,4 @@
-import FinancePay from "../page-component/finance/pay/accounts-pay";
+import FinanceReceive from "@/app/page-component/finance/receive/accounts-receive";
 
 export const metadata = {
   title: "Cadastro de Pessoas",
@@ -8,7 +8,7 @@ export const metadata = {
 export default async function CadFinance() {
   return (
     <>
-      <FinancePay />
+      <FinanceReceive />
     </>
   );
 }

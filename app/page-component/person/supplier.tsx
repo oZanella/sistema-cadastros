@@ -86,9 +86,7 @@ export default function Person() {
 
   return (
     <div className="relative w-full">
-      <TitlePersonalizado className="font-bold mb-4">
-        Cadastrar Fornecedor
-      </TitlePersonalizado>
+      <TitlePersonalizado>Cadastrar Fornecedor</TitlePersonalizado>
 
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Card className="p-4">

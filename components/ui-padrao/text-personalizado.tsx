@@ -7,7 +7,7 @@ interface TitlePersonalizadoProps {
 
 export default function TitlePersonalizado({
   children,
-  className = "",
+  className = "font-bold mb-4",
 }: TitlePersonalizadoProps) {
   return <h1 className={`text-2xl ${className}`}>{children}</h1>;
 }
