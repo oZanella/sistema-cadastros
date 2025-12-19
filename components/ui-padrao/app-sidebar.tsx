@@ -21,6 +21,8 @@ import {
   ChevronRight,
   File,
   CoinsIcon,
+  FileChartColumnIncreasing,
+  HandCoinsIcon,
 } from "lucide-react";
 import {
   Collapsible,
@@ -28,25 +30,13 @@ import {
   CollapsibleContent,
 } from "../ui/collapsible";
 import Image from "next/image";
+import { fi } from "date-fns/locale";
 
 const fixItems = [
   {
     title: "Home",
     url: "/home",
     icon: Home,
-  },
-];
-
-const cadastroItems = [
-  {
-    title: "Produtos",
-    url: "/product",
-    icon: Package,
-  },
-  {
-    title: "Financeiro",
-    url: "/finance",
-    icon: CoinsIcon,
   },
 ];
 
@@ -58,6 +48,38 @@ const pessoasItems = [
   {
     title: "Fornecedores",
     url: "/supplier",
+  },
+];
+
+const produtosSubItems = [
+  {
+    title: "Produtos",
+    url: "/product",
+  },
+  {
+    title: "Unidade de Medida",
+    url: "/product/unit",
+  },
+  {
+    title: "Marcas",
+    url: "/product/brands",
+  },
+  {
+    title: "Subtipo",
+    url: "/product/subtype",
+  },
+];
+
+const financeiroItems = [
+  {
+    title: "Contas a Pagar",
+    url: "/finance",
+    icon: CoinsIcon,
+  },
+  {
+    title: "Contas a Receber",
+    url: "/finance",
+    icon: CoinsIcon,
   },
 ];
 
@@ -84,6 +106,8 @@ export function AppSidebar() {
   const [CadastroOpen, setCadastroOpen] = useState(true);
   const [VendasOpen, setVendasOpen] = useState(true);
   const [PessoasOpen, setPessoasOpen] = useState(false);
+  const [ProdutosOpen, setProdutosOpen] = useState(false);
+  const [FinanceOpen, setFinanceOpen] = useState(false);
 
   return (
     <Sidebar>
@@ -156,6 +180,7 @@ export function AppSidebar() {
 
                   <CollapsibleContent>
                     <SidebarMenuSub>
+                      {/* PEOPLE */}
                       <SidebarMenuSubItem>
                         <Collapsible
                           open={PessoasOpen}
@@ -192,17 +217,80 @@ export function AppSidebar() {
                           </CollapsibleContent>
                         </Collapsible>
                       </SidebarMenuSubItem>
-                      {cadastroItems.map((item) => (
-                        <SidebarMenuSubItem key={item.title}>
-                          <Link
-                            href={item.url}
-                            className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-                          >
-                            <item.icon className="h-4 w-4" />
-                            <span>{item.title}</span>
-                          </Link>
-                        </SidebarMenuSubItem>
-                      ))}
+                      {/* PRODUCTS */}
+                      <SidebarMenuSubItem>
+                        <Collapsible
+                          open={ProdutosOpen}
+                          onOpenChange={setProdutosOpen}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <button className="flex w-full items-center justify-between px-2 py-1.5 hover:bg-accent rounded-md transition-colors">
+                              <div className="flex items-center gap-2">
+                                <Package className="h-4 w-4" />
+                                <span>Produtos</span>
+                              </div>
+
+                              <ChevronRight
+                                className={`h-4 w-4 transition-transform duration-200 ${
+                                  ProdutosOpen ? "rotate-90" : ""
+                                }`}
+                              />
+                            </button>
+                          </CollapsibleTrigger>
+
+                          <CollapsibleContent>
+                            <SidebarMenuSub className="ml-4">
+                              {produtosSubItems.map((item) => (
+                                <SidebarMenuSubItem key={item.title}>
+                                  <Link
+                                    href={item.url}
+                                    className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                                  >
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </SidebarMenuSubItem>
+                      {/* FINANCE */}
+                      <SidebarMenuSubItem>
+                        <Collapsible
+                          open={FinanceOpen}
+                          onOpenChange={setFinanceOpen}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <button className="flex w-full items-center justify-between px-2 py-1.5 hover:bg-accent rounded-md transition-colors">
+                              <div className="flex items-center gap-2">
+                                <HandCoinsIcon className="h-4 w-4" />
+                                <span>Financeiro</span>
+                              </div>
+
+                              <ChevronRight
+                                className={`h-4 w-4 transition-transform duration-200 ${
+                                  FinanceOpen ? "rotate-90" : ""
+                                }`}
+                              />
+                            </button>
+                          </CollapsibleTrigger>
+
+                          <CollapsibleContent>
+                            <SidebarMenuSub className="ml-4">
+                              {financeiroItems.map((item) => (
+                                <SidebarMenuSubItem key={item.title}>
+                                  <Link
+                                    href={item.url}
+                                    className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                                  >
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </SidebarMenuSubItem>
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </SidebarMenuItem>
