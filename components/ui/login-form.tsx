@@ -125,14 +125,14 @@ export function LoginForm({
         </div>
       </div>
 
-      <div className="hidden lg:flex items-center justify-center bg-muted px-10">
+      <div className="hidden lg:flex items-center justify-center bg-muted dark:bg-muted/30 px-10">
         <div className="max-w-md text-center space-y-4">
           <Image
             src="/images/logo-zynk.png"
             alt="Logo Zynk"
             width={500}
             height={500}
-            className="object-contain"
+            className="object-contain drop-shadow-md"
           />
           <p className="text-muted-foreground text-lg">
             Gerencie seu sistema com segurança, rapidez e simplicidade.
