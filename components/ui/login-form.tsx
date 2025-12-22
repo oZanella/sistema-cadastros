@@ -36,6 +36,7 @@ export function LoginForm({
       if (error) throw error;
 
       router.push("/home");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err?.message?.toLowerCase().includes("invalid login credentials")) {
         setError("Credenciais incorretas");
