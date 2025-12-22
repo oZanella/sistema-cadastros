@@ -2,8 +2,8 @@ import { LoginForm } from "@/components/ui/login-form";
 
 export default function Login() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
-      <div className="w-full max-w-sm">
+    <div>
+      <div>
         <LoginForm />
       </div>
     </div>

@@ -26,41 +26,27 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const pathname = usePathname();
 
-  const publicRoutes = [
-    "/",
-    "/auth/login",
-    "/auth/sign-up",
-    "/auth/update-password",
-    "/auth/forgot-password",
-  ];
-  const isPublicPage = publicRoutes.includes(pathname);
+  const isAuthRoute = pathname.startsWith("/auth");
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {isPublicPage ? (
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className="flex items-center justify-center min-h-screen">
-              {children}
-            </main>
-          </ThemeProvider>
-        ) : (
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {isAuthRoute ? (
+            // 🔓 TELAS DE LOGIN / RESET / SIGN-UP
+            <main className="min-h-screen">{children}</main>
+          ) : (
+            // 🔐 SISTEMA LOGADO
             <SidebarProvider defaultOpen={false}>
               <AppSidebar />
               <SidebarInset>
@@ -75,11 +61,12 @@ export default function RootLayout({
                     <LoginButton />
                   </div>
                 </header>
+
                 <main className="flex-1 p-6">{children}</main>
               </SidebarInset>
             </SidebarProvider>
-          </ThemeProvider>
-        )}
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );

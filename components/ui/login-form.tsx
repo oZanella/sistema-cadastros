@@ -59,7 +59,7 @@ export function LoginForm({
       {...props}
     >
       <div className="flex items-center justify-center px-6">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md min-h-[520px] flex flex-col justify-center space-y-8">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight text-grey-900">
               Bem-vindo ao Zynk System

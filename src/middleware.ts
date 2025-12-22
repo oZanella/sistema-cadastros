@@ -1,13 +1,11 @@
-import { updateSession } from "@/lib/supabase/middleware"
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { createServerClient } from "@supabase/ssr"
+import { updateSession } from "@/lib/supabase/middleware";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(request: NextRequest) {
-  // Atualiza a sessão (mantém login persistente)
-  const response = await updateSession(request)
+  const response = await updateSession(request);
 
-  // Cria um client Supabase no contexto do middleware
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -16,32 +14,50 @@ export async function middleware(request: NextRequest) {
         get: (name) => request.cookies.get(name)?.value,
       },
     }
-  )
+  );
 
-  // Verifica se há uma sessão ativa
-  const { data } = await supabase.auth.getSession()
-  const isAuth = !!data.session
+  const { data } = await supabase.auth.getSession();
+  const isAuth = !!data.session;
+  const pathname = request.nextUrl.pathname;
 
-  const pathname = request.nextUrl.pathname
-  const isLoginPage = pathname === "/" || pathname === "/login"
+  /** 🔓 ROTAS AUTH LIBERADAS SEM REDIRECIONAR */
+  const publicAuthRoutes = [
+    "/auth/login",
+    "/auth/forgot-password",
+    "/auth/update-password",
+    "/auth/sign-up",
+  ];
 
-  // 🔒 1. Se não estiver logado e tentar acessar outra página → redireciona para login
-  if (!isAuth && !isLoginPage) {
-    return NextResponse.redirect(new URL("/", request.url))
+  // 🔁 Sempre que acessar "/" → redireciona corretamente
+  if (
+    isAuth &&
+    pathname.startsWith("/auth") &&
+    pathname !== "/auth/update-password"
+  ) {
+    return NextResponse.redirect(new URL("/home", request.url));
   }
 
-  // 🔁 2. Se já estiver logado e tentar acessar a página de login → vai para /home
-  if (isAuth && isLoginPage) {
-    return NextResponse.redirect(new URL("/home", request.url))
+  // 🔒 Não logado tentando acessar rota protegida
+  if (
+    !isAuth &&
+    !publicAuthRoutes.some((route) => pathname.startsWith(route))
+  ) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  // Retorna a resposta normal (com sessão atualizada)
-  return response
+  // 🔁 Logado tentando acessar login ou signup
+  if (
+    isAuth &&
+    ["/auth/login", "/auth/sign-up"].some((route) => pathname.startsWith(route))
+  ) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
+
+  return response;
 }
 
-// Aplica o middleware a todas as rotas, exceto assets e imagens
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};

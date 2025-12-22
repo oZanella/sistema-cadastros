@@ -46,13 +46,12 @@ export function ForgotPasswordForm({
       )}
       {...props}
     >
-      {/* LADO ESQUERDO — FORM */}
       <div className="flex items-center justify-center px-6">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-10">
           {success ? (
             <>
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">
+              <div className="space-y-3">
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                   Verifique seu e-mail
                 </h1>
                 <p className="text-muted-foreground">
@@ -60,22 +59,27 @@ export function ForgotPasswordForm({
                 </p>
               </div>
 
-              <p className="text-sm text-muted-foreground">
-                Caso exista uma conta associada a este e-mail, você receberá as
-                instruções para redefinir sua senha.
-              </p>
+              <div className="rounded-lg border border-muted bg-muted/40 px-4 py-3">
+                <p className="text-sm text-muted-foreground">
+                  Caso exista uma conta associada a este e-mail, você receberá
+                  as instruções para redefinir sua senha.
+                </p>
+              </div>
 
-              <Button asChild className="w-full">
+              <Button
+                asChild
+                className="w-full bg-linear-to-r from-cyan-400 via-blue-500 to-violet-500 text-white font-semibold shadow-lg shadow-cyan-500/20 hover:brightness-110 transition-all"
+              >
                 <Link href="/auth/login">Voltar para o login</Link>
               </Button>
             </>
           ) : (
             <>
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">
+              <div className="space-y-3">
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                   Recuperar senha
                 </h1>
-                <p className="text-zinc-400">
+                <p className="text-muted-foreground">
                   Informe seu e-mail para receber o link de redefinição
                 </p>
               </div>
@@ -93,12 +97,14 @@ export function ForgotPasswordForm({
                   />
                 </div>
 
-                {error && <p className="text-sm text-red-500">{error}</p>}
+                {error && (
+                  <p className="text-sm text-red-500 font-medium">{error}</p>
+                )}
 
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-linear-to-r from-cyan-400 via-blue-500 to-violet-500 text-white font-semibold hover:brightness-110 transition-all shadow-lg shadow-cyan-500/20"
+                  className="w-full bg-linear-to-r from-cyan-400 via-blue-500 to-violet-500 text-white font-semibold shadow-lg shadow-cyan-500/20 hover:brightness-110 transition-all"
                 >
                   {isLoading ? "Enviando..." : "Enviar link de redefinição"}
                 </Button>
