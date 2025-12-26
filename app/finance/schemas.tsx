@@ -2,9 +2,7 @@ import z from "zod";
 
 export const financeZod = z.object({
   id: z.number(),
-
   created_at: z.string().optional(),
-
   tipo: z.string().transform((val) => {
     if (val === "Receita" || val === "Despesa") {
       return val;
@@ -14,7 +12,6 @@ export const financeZod = z.object({
     if (lower.includes("despes")) return "Despesa";
     return val;
   }),
-
   data: z
     .string()
     .or(z.date())
@@ -33,11 +30,8 @@ export const financeZod = z.object({
       }
       return val;
     }),
-
   nome: z.string().min(1).max(60),
-
   historico: z.string().nullable().optional(),
-
   valor: z
     .number()
     .or(z.string())
