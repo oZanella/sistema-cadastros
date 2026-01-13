@@ -43,7 +43,6 @@ export default function FinanceEditModal({
   const selectedDate = formData.data ? new Date(formData.data) : undefined;
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -152,7 +151,7 @@ export default function FinanceEditModal({
           <Button variant="outline" onClick={onClose}>
             Cancelar
           </Button>
-          <Button onClick={onSave} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={onSave} className="bg-green-600 hover:bg-green-700">
             Salvar Alterações
           </Button>
         </DialogFooter>

@@ -132,7 +132,7 @@ export default function FinancePay() {
             onChange={(e) => setPesquisa(e.target.value)}
           />
 
-          <Button className="bg-green-600 hover:bg-green-700 cursor-pointer ">
+          <Button className="bg-green-600 hover:bg-green-700 cursor-pointer">
             <Plus className="w-4 h-4 " />
             Adicionar
           </Button>
@@ -181,7 +181,7 @@ export default function FinancePay() {
                   dadosFiltrados.map((item) => (
                     <tr
                       key={item.id}
-                      className="border-b hover:bg-gray-50 cursor-default"
+                      className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 cursor-default"
                     >
                       <td className="py-3 px-4">
                         {item.tipo === "Aberto" ? (

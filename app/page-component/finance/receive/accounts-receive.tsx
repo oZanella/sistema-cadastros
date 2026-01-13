@@ -252,7 +252,7 @@ export default function FinanceReceive() {
                   dadosFiltrados.map((item) => (
                     <tr
                       key={item.id}
-                      className="border-b hover:bg-gray-50 cursor-default"
+                      className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 cursor-default"
                     >
                       <td className="py-3 px-4">
                         {item.tipo === "Aberto" ? (
