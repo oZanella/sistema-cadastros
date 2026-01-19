@@ -59,9 +59,10 @@ function Calendar({
     >
       <DayPicker
         showOutsideDays={showOutsideDays}
+        fixedWeeks
         className={cn(
           "bg-background group/calendar p-3 [--cell-size:--spacing(8)]",
-          className
+          className,
         )}
         captionLayout={captionLayout}
         formatters={{
@@ -73,26 +74,26 @@ function Calendar({
           root: cn("w-fit", defaultClassNames.root),
           months: cn(
             "flex gap-4 flex-col md:flex-row relative",
-            defaultClassNames.months
+            defaultClassNames.months,
           ),
           month: cn("flex flex-col w-full gap-4", defaultClassNames.month),
           nav: cn(
             "flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between",
-            defaultClassNames.nav
+            defaultClassNames.nav,
           ),
           button_previous: cn(
             buttonVariants({ variant: buttonVariant }),
-            "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none",
-            defaultClassNames.button_previous
+            "size-(--cell-size) aria-disabled:opacity-50 p-0 cursor-pointer",
+            defaultClassNames.button_previous,
           ),
           button_next: cn(
             buttonVariants({ variant: buttonVariant }),
-            "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none",
-            defaultClassNames.button_next
+            "size-(--cell-size) aria-disabled:opacity-50 p-0 cursor-pointer",
+            defaultClassNames.button_next,
           ),
           month_caption: cn(
             "flex items-center justify-center h-(--cell-size) w-full px-(--cell-size)",
-            defaultClassNames.month_caption
+            defaultClassNames.month_caption,
           ),
           ...classNames,
         }}
@@ -164,7 +165,7 @@ function CalendarDayButton({
       className={cn(
         "cursor-pointer data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground flex aspect-square w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal",
         defaultClassNames.day,
-        className
+        className,
       )}
       {...props}
     />
