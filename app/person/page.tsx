@@ -1,14 +1,5 @@
-import Person from "../page-component/person/person";
+import PersonList from "@/app/page-component/person/page-list/page";
 
-export const metadata = {
-  title: "Cadastro de Pessoas",
-  description: "Cadastro",
-};
-
-export default async function CadPerson() {
-  return (
-    <>
-      <Person />
-    </>
-  );
+export default function Page() {
+  return <PersonList />;
 }

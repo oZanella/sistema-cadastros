@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from "react";
@@ -21,7 +20,6 @@ import {
   ChevronRight,
   File,
   CoinsIcon,
-  FileChartColumnIncreasing,
   HandCoinsIcon,
 } from "lucide-react";
 import {
@@ -30,7 +28,6 @@ import {
   CollapsibleContent,
 } from "../ui/collapsible";
 import Image from "next/image";
-import { fi } from "date-fns/locale";
 
 const fixItems = [
   {

@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/select";
 import { ChevronDown } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
 
 export default function Person() {
   const [submitting, setSubmitting] = useState(false);
   const [tipoPessoa, setTipoPessoa] = useState<string>("");
+  const router = useRouter();
 
   const form = useForm<PersonFormProps>({
     resolver: zodResolver(personZod),
@@ -197,10 +199,10 @@ export default function Person() {
               >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 flex-wrap">
                   <div className="flex-1 min-w-0">
-                    <p className="text-mb font-semibold break-words">
+                    <p className="text-mb font-semibold wrap-break-word">
                       {item.title}
                     </p>
-                    <p className="text-xs text-black/70 dark:text-white/70 leading-snug break-words">
+                    <p className="text-xs text-black/70 dark:text-white/70 leading-snug wrap-break-word">
                       {item.desc}
                     </p>
                   </div>
@@ -214,7 +216,14 @@ export default function Person() {
           </div>
         </Card>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-4 gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/person")}
+          >
+            {submitting ? "Voltando..." : "Voltar"}
+          </Button>
           <Button type="submit" disabled={submitting}>
             {submitting ? "Enviando..." : "Enviar"}
           </Button>
