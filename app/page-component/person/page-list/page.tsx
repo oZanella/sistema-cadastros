@@ -5,9 +5,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { ModalDelete } from "@/components/ui-padrao/modal-delete";
 
 type Pessoa = {
   id: number;
@@ -33,6 +34,11 @@ export default function PersonList() {
   const [dados, setDados] = useState<Pessoa[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [modalAberto, setModalAberto] = useState(false);
+  const [pessoaSelecionada, setPessoaSelecionada] = useState<Pessoa | null>(
+    null,
+  );
+
   async function carregarPessoas() {
     setLoading(true);
 
@@ -56,22 +62,31 @@ export default function PersonList() {
     item.nome.toLowerCase().includes(pesquisa.toLowerCase()),
   );
 
-  const handleExcluir = async (id: number) => {
-    if (!confirm("Deseja realmente excluir esta pessoa?")) return;
+  const abrirModalExcluir = (pessoa: Pessoa) => {
+    setPessoaSelecionada(pessoa);
+    setModalAberto(true);
+  };
 
-    const { data, error } = await supabase
+  const fecharModalExcluir = () => {
+    setPessoaSelecionada(null);
+    setModalAberto(false);
+  };
+
+  const confirmarExclusao = async () => {
+    if (!pessoaSelecionada) return;
+
+    const { error } = await supabase
       .from("pessoas")
-      .select("*")
-      .order("nome");
-
-    console.log(data);
+      .delete()
+      .eq("id", pessoaSelecionada.id);
 
     if (error) {
       alert("Erro ao excluir registro");
-    } else {
-      alert("Pessoa excluída com sucesso");
-      carregarPessoas();
+      return;
     }
+
+    fecharModalExcluir();
+    carregarPessoas();
   };
 
   return (
@@ -89,8 +104,10 @@ export default function PersonList() {
 
           <Button
             className="bg-green-600 hover:bg-green-700"
+            variant="defaultAdd"
             onClick={() => router.push("/person/register")}
           >
+            <Plus className="w-4 h-4 " />
             Adicionar
           </Button>
         </div>
@@ -162,9 +179,10 @@ export default function PersonList() {
                               router.push(`/person/cadastro?id=${item.id}`)
                             }
                           />
+
                           <Trash
                             className="w-4 h-4 cursor-pointer text-red-600 hover:text-red-800"
-                            onClick={() => handleExcluir(item.id)}
+                            onClick={() => abrirModalExcluir(item)}
                           />
                         </div>
                       </td>
@@ -176,6 +194,17 @@ export default function PersonList() {
           </div>
         </Card>
       </div>
+
+      <ModalDelete
+        open={modalAberto}
+        onClose={fecharModalExcluir}
+        onConfirm={confirmarExclusao}
+        loading={false}
+        title="Excluir Pessoa"
+        description={`Tem certeza que deseja excluir a pessoa "${
+          pessoaSelecionada ? pessoaSelecionada.nome : ""
+        }"? Esta ação não poderá ser desfeita.`}
+      />
     </div>
   );
 }

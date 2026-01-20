@@ -62,6 +62,7 @@ export default function Person() {
       alert("Pessoa cadastrada com sucesso!");
       form.reset();
       setTipoPessoa("");
+      router.push("/person");
     }
 
     setSubmitting(false);
@@ -224,7 +225,7 @@ export default function Person() {
           >
             {submitting ? "Voltando..." : "Voltar"}
           </Button>
-          <Button type="submit" disabled={submitting}>
+          <Button type="submit" variant={"default"} disabled={submitting}>
             {submitting ? "Enviando..." : "Enviar"}
           </Button>
         </div>
