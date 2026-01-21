@@ -33,6 +33,7 @@ export default function PersonList() {
   const [pesquisa, setPesquisa] = useState("");
   const [dados, setDados] = useState<Pessoa[]>([]);
   const [loading, setLoading] = useState(true);
+  const [excluindo, setExcluindo] = useState(false);
 
   const [modalAberto, setModalAberto] = useState(false);
   const [pessoaSelecionada, setPessoaSelecionada] = useState<Pessoa | null>(
@@ -75,10 +76,14 @@ export default function PersonList() {
   const confirmarExclusao = async () => {
     if (!pessoaSelecionada) return;
 
+    setExcluindo(true);
+
     const { error } = await supabase
       .from("pessoas")
       .delete()
       .eq("id", pessoaSelecionada.id);
+
+    setExcluindo(false);
 
     if (error) {
       alert("Erro ao excluir registro");
@@ -199,11 +204,11 @@ export default function PersonList() {
         open={modalAberto}
         onClose={fecharModalExcluir}
         onConfirm={confirmarExclusao}
-        loading={false}
+        loading={excluindo}
         title="Excluir Pessoa"
         description={`Tem certeza que deseja excluir a pessoa "${
-          pessoaSelecionada ? pessoaSelecionada.nome : ""
-        }"? Esta ação não poderá ser desfeita.`}
+          pessoaSelecionada?.nome ?? ""
+        }"?`}
       />
     </div>
   );

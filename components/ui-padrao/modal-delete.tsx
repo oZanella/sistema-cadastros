@@ -18,8 +18,8 @@ export function ModalDelete({
   onClose,
   onConfirm,
   loading = false,
-  title = "Excluir registro",
-  description = "Tem certeza que deseja excluir este registro? Esta ação não poderá ser desfeita.",
+  title = "",
+  description = "",
 }: ModalDeleteProps) {
   return (
     <Dialog.Root open={open} onOpenChange={(value) => !value && onClose()}>
