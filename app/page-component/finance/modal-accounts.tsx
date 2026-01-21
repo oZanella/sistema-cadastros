@@ -152,7 +152,7 @@ export default function FinanceEditModal({
             Cancelar
           </Button>
           <Button onClick={onSave} className="bg-green-600 hover:bg-green-700">
-            Salvar Alterações
+            Atualizar
           </Button>
         </DialogFooter>
       </DialogContent>

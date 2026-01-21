@@ -180,8 +180,8 @@ export default function FinanceReceive() {
               historico: formData.historico,
               valor: parseFloat(formData.valor),
             }
-          : item
-      )
+          : item,
+      ),
     );
 
     setIsEditOpen(false);
@@ -189,7 +189,7 @@ export default function FinanceReceive() {
   };
 
   const dadosFiltrados = dados.filter((item) =>
-    item.nome.toLowerCase().includes(pesquisa.toLowerCase())
+    item.nome.toLowerCase().includes(pesquisa.toLowerCase()),
   );
 
   return (
@@ -204,7 +204,10 @@ export default function FinanceReceive() {
             onChange={(e) => setPesquisa(e.target.value)}
           />
 
-          <Button className="bg-green-600 hover:bg-green-700 cursor-pointer ">
+          <Button
+            variant={"defaultAdd"}
+            className="bg-green-600 hover:bg-green-700 cursor-pointer"
+          >
             <Plus className="w-4 h-4 " />
             Adicionar
           </Button>

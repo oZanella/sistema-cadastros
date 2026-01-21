@@ -317,7 +317,7 @@ export default function Person() {
                 ? "Salvando..."
                 : "Enviando..."
               : isEdit
-                ? "Salvar Alterações"
+                ? "Atualizar"
                 : "Cadastrar"}
           </Button>
         </div>
