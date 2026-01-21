@@ -4,9 +4,8 @@ export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "@/components/form/form-input";
-import { personZod, PersonFormProps } from "@/app/person/schemas";
+import { PersonFormProps } from "@/app/person/schemas";
 import { Button } from "@/components/ui/button";
 import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
 import { supabase } from "@/lib/supabaseClient";
@@ -34,7 +33,7 @@ export default function Person() {
   const isEdit = Boolean(id);
 
   const form = useForm<PersonFormProps>({
-    resolver: zodResolver(personZod),
+    shouldUnregister: true,
     defaultValues: {
       nome: "",
       idade: "",
@@ -93,7 +92,7 @@ export default function Person() {
 
     const cnpjcpfFinal =
       values.tipo === "E"
-        ? "9999999999999"
+        ? "99999999999999"
         : (values.cnpjcpf ?? "").replace(/\D/g, "");
 
     const payload = {
@@ -178,12 +177,17 @@ export default function Person() {
                     estrangeiro: "E",
                   } as const;
 
-                  form.setValue("tipo", tipoMap[value as keyof typeof tipoMap]);
+                  form.setValue(
+                    "tipo",
+                    tipoMap[value as keyof typeof tipoMap],
+                    {
+                      shouldValidate: true,
+                    },
+                  );
 
                   if (value === "estrangeiro") {
-                    form.setValue("cnpjcpf", "9999999999999");
-                  } else {
-                    form.setValue("cnpjcpf", "");
+                    const padraoEstrangeiro = "99999999999999";
+                    form.setValue("cnpjcpf", maskCNPJ(padraoEstrangeiro));
                   }
                 }}
               >
@@ -205,10 +209,17 @@ export default function Person() {
               control={form.control}
               name="cnpjcpf"
               label="CPF/CNPJ"
-              required
               disabled={tipoPessoa === "estrangeiro"}
               onChange={(e) => {
                 let raw = e.target.value.replace(/\D/g, "");
+
+                if (tipoPessoa === "estrangeiro") {
+                  const padraoEstrangeiro = "99999999999999";
+                  form.setValue("cnpjcpf", maskCNPJ(padraoEstrangeiro), {
+                    shouldValidate: true,
+                  });
+                  return;
+                }
 
                 if (tipoPessoa === "juridica") {
                   raw = raw.slice(0, 14);

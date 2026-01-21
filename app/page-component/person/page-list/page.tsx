@@ -170,11 +170,9 @@ export default function PersonList() {
                       <td className="py-3 px-4 text-sm">{item.nome}</td>
 
                       <td className="py-3 px-4 text-sm">
-                        {item.tp === "E"
-                          ? "-"
-                          : item.tp === "J"
-                            ? maskCNPJ(item.cnpjcpf ?? "")
-                            : maskCPF(item.cnpjcpf ?? "")}
+                        {item.tp === "F"
+                          ? maskCPF(item.cnpjcpf ?? "")
+                          : maskCNPJ(item.cnpjcpf ?? "")}{" "}
                       </td>
 
                       <td className="py-3 px-4 text-sm">{item.telefone}</td>

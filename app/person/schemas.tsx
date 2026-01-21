@@ -15,12 +15,12 @@ export const personZod = z
       .enum(["F", "J", "E"])
       .refine((val) => !!val, { message: "Tipo de pessoa é obrigatório" }),
 
-    cnpjcpf: z
-      .string()
-      .transform((val) => val.replace(/\D/g, ""))
-      .refine((val) => val.length === 11 || val.length === 14, {
-        message: "CPF deve ter 11 dígitos ou CNPJ 14 dígitos",
-      }),
+    cnpjcpf: z.preprocess((val) => {
+      if (typeof val === "string") {
+        return val.replace(/\D/g, "");
+      }
+      return val;
+    }, z.string()),
 
     email: z
       .string()
@@ -33,30 +33,34 @@ export const personZod = z
       .regex(/^\d{10,11}$/, "Telefone deve ter entre 10 e 11 dígitos")
       .optional(),
   })
+
   .superRefine((data, ctx) => {
+    if (!data.tipo) return;
+
     if (data.tipo === "E") {
       if (data.cnpjcpf !== "9999999999999") {
         ctx.addIssue({
-          code: "custom",
-          message: "Para estrangeiro, o CPF/CNPJ deve ser 9999999999999",
           path: ["cnpjcpf"],
+          message: "Para estrangeiro, informe 9999999999999",
+          code: z.ZodIssueCode.custom,
         });
       }
+      return;
     }
 
     if (data.tipo === "F" && data.cnpjcpf.length !== 11) {
       ctx.addIssue({
-        code: "custom",
-        message: "CPF deve conter 11 dígitos",
         path: ["cnpjcpf"],
+        message: "CPF deve conter 11 dígitos",
+        code: z.ZodIssueCode.custom,
       });
     }
 
     if (data.tipo === "J" && data.cnpjcpf.length !== 14) {
       ctx.addIssue({
-        code: "custom",
-        message: "CNPJ deve conter 14 dígitos",
         path: ["cnpjcpf"],
+        message: "CNPJ deve conter 14 dígitos",
+        code: z.ZodIssueCode.custom,
       });
     }
   });
