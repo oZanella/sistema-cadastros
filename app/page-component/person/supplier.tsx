@@ -197,10 +197,10 @@ export default function Person() {
               >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 flex-wrap">
                   <div className="flex-1 min-w-0">
-                    <p className="text-mb font-semibold break-words">
+                    <p className="text-mb font-semibold wrap-break-word">
                       {item.title}
                     </p>
-                    <p className="text-xs text-black/70 dark:text-white/70 leading-snug break-words">
+                    <p className="text-xs text-black/70 dark:text-white/70 leading-snug wrap-break-word">
                       {item.desc}
                     </p>
                   </div>

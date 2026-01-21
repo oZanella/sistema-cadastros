@@ -68,7 +68,9 @@ export default function Person() {
         cnpjcpf:
           data.tp === "J"
             ? maskCNPJ(String(data.cnpjcpf ?? ""))
-            : String(data.cnpjcpf ?? ""),
+            : data.tp === "F"
+              ? maskCPF(String(data.cnpjcpf ?? ""))
+              : String(data.cnpjcpf ?? ""),
         email: String(data.email ?? ""),
         telefone: String(data.telefone ?? ""),
         tipo: data.tp,
