@@ -36,7 +36,7 @@ export default function Person() {
     resolver: zodResolver(personZod),
     defaultValues: {
       nome: "",
-      idade: undefined,
+      idade: "",
       cnpjcpf: "",
       email: "",
       telefone: "",
@@ -61,17 +61,15 @@ export default function Person() {
         return;
       }
 
-      // Preenche o formulário
       form.reset({
-        nome: data.nome,
-        idade: data.idade,
-        cnpjcpf: data.cnpjcpf,
-        email: data.email,
-        telefone: data.telefone,
+        nome: String(data.nome ?? ""),
+        idade: String(data.idade ?? ""),
+        cnpjcpf: String(data.cnpjcpf ?? ""),
+        email: String(data.email ?? ""),
+        telefone: String(data.telefone ?? ""),
         tipo: data.tp,
       });
 
-      // Ajusta o Select visual
       const tipoReverseMap: Record<TipoPessoaDB, string> = {
         F: "fisica",
         J: "juridica",
@@ -91,7 +89,7 @@ export default function Person() {
 
     const payload = {
       nome: values.nome,
-      idade: values.idade,
+      idade: values.idade ? Number(values.idade) : null,
       tp: values.tipo,
       cnpjcpf: cnpjcpfFinal,
       email: values.email,
@@ -226,7 +224,6 @@ export default function Person() {
               control={form.control}
               name="telefone"
               label="Telefone"
-              required
               maxLength={11}
             />
 
