@@ -9,6 +9,7 @@ import { Pencil, Plus, Trash } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { ModalDelete } from "@/components/ui-padrao/modal-delete";
+import { maskCPF, maskCNPJ } from "@/utils/masks";
 
 type Pessoa = {
   id: number;
@@ -169,7 +170,11 @@ export default function PersonList() {
                       <td className="py-3 px-4 text-sm">{item.nome}</td>
 
                       <td className="py-3 px-4 text-sm">
-                        {item.tp === "E" ? "-" : item.cnpjcpf}
+                        {item.tp === "E"
+                          ? "-"
+                          : item.tp === "J"
+                            ? maskCNPJ(item.cnpjcpf ?? "")
+                            : maskCPF(item.cnpjcpf ?? "")}
                       </td>
 
                       <td className="py-3 px-4 text-sm">{item.telefone}</td>

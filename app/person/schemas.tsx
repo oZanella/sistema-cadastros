@@ -9,10 +9,7 @@ export const personZod = z
       .min(1, "Nome é obrigatório")
       .max(60, "Nome não pode ter mais de 60 caracteres"),
 
-    idade: z
-      .string()
-      .min(1, "Idade inválida, deve ser maior que zero")
-      .max(3, "Máximo de 3 caracteres"),
+    idade: z.string().max(3, "Máximo de 3 caracteres"),
 
     tipo: z
       .enum(["F", "J", "E"])
@@ -20,10 +17,10 @@ export const personZod = z
 
     cnpjcpf: z
       .string()
-      .regex(/^\d+$/, "CPF/CNPJ deve conter apenas números")
-      .min(11, "CPF/CNPJ deve ter no mínimo 11 dígitos")
-      .max(14, "CPF/CNPJ não pode ter mais de 14 dígitos")
-      .optional(),
+      .transform((val) => val.replace(/\D/g, ""))
+      .refine((val) => val.length === 11 || val.length === 14, {
+        message: "CPF deve ter 11 dígitos ou CNPJ 14 dígitos",
+      }),
 
     email: z
       .string()
@@ -47,7 +44,7 @@ export const personZod = z
       }
     }
 
-    if (data.tipo === "F" && data.cnpjcpf && data.cnpjcpf.length !== 11) {
+    if (data.tipo === "F" && data.cnpjcpf.length !== 11) {
       ctx.addIssue({
         code: "custom",
         message: "CPF deve conter 11 dígitos",
@@ -55,7 +52,7 @@ export const personZod = z
       });
     }
 
-    if (data.tipo === "J" && data.cnpjcpf && data.cnpjcpf.length !== 14) {
+    if (data.tipo === "J" && data.cnpjcpf.length !== 14) {
       ctx.addIssue({
         code: "custom",
         message: "CNPJ deve conter 14 dígitos",

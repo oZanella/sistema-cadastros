@@ -23,6 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { maskCNPJ, maskCPF } from "@/utils/masks";
 
 export default function Person() {
   const [submitting, setSubmitting] = useState(false);
@@ -64,7 +65,10 @@ export default function Person() {
       form.reset({
         nome: String(data.nome ?? ""),
         idade: String(data.idade ?? ""),
-        cnpjcpf: String(data.cnpjcpf ?? ""),
+        cnpjcpf:
+          data.tp === "J"
+            ? maskCNPJ(String(data.cnpjcpf ?? ""))
+            : String(data.cnpjcpf ?? ""),
         email: String(data.email ?? ""),
         telefone: String(data.telefone ?? ""),
         tipo: data.tp,
@@ -85,7 +89,10 @@ export default function Person() {
   const handleSubmit = async (values: PersonFormProps) => {
     setSubmitting(true);
 
-    const cnpjcpfFinal = values.tipo === "E" ? "9999999999999" : values.cnpjcpf;
+    const cnpjcpfFinal =
+      values.tipo === "E"
+        ? "9999999999999"
+        : (values.cnpjcpf ?? "").replace(/\D/g, "");
 
     const payload = {
       nome: values.nome,
@@ -197,8 +204,24 @@ export default function Person() {
               name="cnpjcpf"
               label="CPF/CNPJ"
               required
-              maxLength={14}
               disabled={tipoPessoa === "estrangeiro"}
+              onChange={(e) => {
+                let raw = e.target.value.replace(/\D/g, "");
+
+                if (tipoPessoa === "juridica") {
+                  raw = raw.slice(0, 14);
+                  form.setValue("cnpjcpf", maskCNPJ(raw), {
+                    shouldValidate: true,
+                  });
+                }
+
+                if (tipoPessoa === "fisica") {
+                  raw = raw.slice(0, 11);
+                  form.setValue("cnpjcpf", maskCPF(raw), {
+                    shouldValidate: true,
+                  });
+                }
+              }}
             />
 
             <FormInput
@@ -214,7 +237,6 @@ export default function Person() {
               control={form.control}
               name="idade"
               label="Idade"
-              required
               className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               maxLength={3}
             />
