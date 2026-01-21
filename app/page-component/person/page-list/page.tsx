@@ -181,7 +181,7 @@ export default function PersonList() {
                           <Pencil
                             className="w-4 h-4 cursor-pointer text-blue-600 hover:text-blue-800"
                             onClick={() =>
-                              router.push(`/person/cadastro?id=${item.id}`)
+                              router.push(`/person/register?id=${item.id}`)
                             }
                           />
 

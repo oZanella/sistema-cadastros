@@ -21,11 +21,16 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function Person() {
   const [submitting, setSubmitting] = useState(false);
   const [tipoPessoa, setTipoPessoa] = useState<string>("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const isEdit = Boolean(id);
 
   const form = useForm<PersonFormProps>({
     resolver: zodResolver(personZod),
@@ -39,33 +44,80 @@ export default function Person() {
     },
   });
 
+  type TipoPessoaDB = "F" | "J" | "E";
+
+  useEffect(() => {
+    if (!id) return;
+
+    async function carregarPessoa() {
+      const { data, error } = await supabase
+        .from("pessoas")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) {
+        alert("Erro ao carregar pessoa para edição");
+        return;
+      }
+
+      // Preenche o formulário
+      form.reset({
+        nome: data.nome,
+        idade: data.idade,
+        cnpjcpf: data.cnpjcpf,
+        email: data.email,
+        telefone: data.telefone,
+        tipo: data.tp,
+      });
+
+      // Ajusta o Select visual
+      const tipoReverseMap: Record<TipoPessoaDB, string> = {
+        F: "fisica",
+        J: "juridica",
+        E: "estrangeiro",
+      };
+
+      setTipoPessoa(tipoReverseMap[data.tp as TipoPessoaDB]);
+    }
+
+    carregarPessoa();
+  }, [id, form]);
+
   const handleSubmit = async (values: PersonFormProps) => {
     setSubmitting(true);
 
     const cnpjcpfFinal = values.tipo === "E" ? "9999999999999" : values.cnpjcpf;
 
-    const { error } = await supabase.from("pessoas").insert([
-      {
-        nome: values.nome,
-        idade: values.idade,
-        tp: values.tipo,
-        cnpjcpf: cnpjcpfFinal,
-        email: values.email,
-        telefone: values.telefone,
-      },
-    ]);
+    const payload = {
+      nome: values.nome,
+      idade: values.idade,
+      tp: values.tipo,
+      cnpjcpf: cnpjcpfFinal,
+      email: values.email,
+      telefone: values.telefone,
+    };
 
-    if (error) {
-      console.error("Erro ao salvar no Supabase:", error);
-      alert("Erro ao salvar pessoa no banco de dados.");
-    } else {
-      alert("Pessoa cadastrada com sucesso!");
-      form.reset();
-      setTipoPessoa("");
-      router.push("/person");
-    }
+    const { error } = isEdit
+      ? await supabase.from("pessoas").update(payload).eq("id", id)
+      : await supabase.from("pessoas").insert([payload]);
 
     setSubmitting(false);
+
+    if (error) {
+      alert("Erro ao salvar pessoa");
+      return;
+    }
+
+    alert(
+      isEdit
+        ? "Pessoa atualizada com sucesso!"
+        : "Pessoa cadastrada com sucesso!",
+    );
+
+    form.reset();
+    setTipoPessoa("");
+    router.push("/person");
   };
 
   const itens = [
@@ -83,13 +135,15 @@ export default function Person() {
     },
     {
       title: "Situação",
-      desc: "Define se o cliente está ativo ou inativo no sistema.",
+      desc: "Define a situação do cliente como ativo ou inativo no sistema.",
     },
   ];
 
   return (
     <div className="relative w-full">
-      <TitlePersonalizado>Cadastrar Cliente</TitlePersonalizado>
+      <TitlePersonalizado>
+        {isEdit ? "Editar Cliente" : "Cadastrar Cliente"}
+      </TitlePersonalizado>
 
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Card className="p-4">
@@ -226,7 +280,13 @@ export default function Person() {
             {submitting ? "Voltando..." : "Voltar"}
           </Button>
           <Button type="submit" variant={"default"} disabled={submitting}>
-            {submitting ? "Enviando..." : "Enviar"}
+            {submitting
+              ? isEdit
+                ? "Salvando..."
+                : "Enviando..."
+              : isEdit
+                ? "Salvar Alterações"
+                : "Cadastrar"}
           </Button>
         </div>
       </form>
