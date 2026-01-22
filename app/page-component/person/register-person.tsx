@@ -22,7 +22,7 @@ import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { maskCNPJ, maskCPF } from "@/utils/masks";
+import { maskCNPJ, maskCPF, maskTelefone } from "@/utils/masks";
 
 export default function Person() {
   const [submitting, setSubmitting] = useState(false);
@@ -71,7 +71,7 @@ export default function Person() {
               ? maskCPF(String(data.cnpjcpf ?? ""))
               : String(data.cnpjcpf ?? ""),
         email: String(data.email ?? ""),
-        telefone: String(data.telefone ?? ""),
+        telefone: maskTelefone(String(data.telefone ?? "")),
         tipo: data.tp,
       });
 
@@ -101,7 +101,7 @@ export default function Person() {
       tp: values.tipo,
       cnpjcpf: cnpjcpfFinal,
       email: values.email,
-      telefone: values.telefone,
+      telefone: values.telefone?.replace(/\D/g, ""),
     };
 
     const { error } = isEdit
@@ -259,7 +259,13 @@ export default function Person() {
               control={form.control}
               name="telefone"
               label="Telefone"
-              maxLength={11}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+                form.setValue("telefone", maskTelefone(raw), {
+                  shouldValidate: true,
+                });
+              }}
             />
 
             <FormInput

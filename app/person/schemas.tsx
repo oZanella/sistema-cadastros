@@ -28,10 +28,18 @@ export const personZod = z
       .max(60, "E-mail muito longo")
       .email("E-mail inválido"),
 
-    telefone: z
-      .string()
-      .regex(/^\d{10,11}$/, "Telefone deve ter entre 10 e 11 dígitos")
-      .optional(),
+    telefone: z.preprocess(
+      (val) => {
+        if (typeof val === "string") {
+          return val.replace(/\D/g, "");
+        }
+        return val;
+      },
+      z
+        .string()
+        .regex(/^\d{10,11}$/, "Telefone deve ter entre 10 e 11 dígitos")
+        .optional(),
+    ),
   })
 
   .superRefine((data, ctx) => {
