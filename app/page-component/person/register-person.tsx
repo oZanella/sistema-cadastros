@@ -129,11 +129,11 @@ export default function Person() {
   const itens = [
     {
       title: "Fornecedor",
-      desc: "Marque se o cliente também atua como fornecedor de produtos ou serviços.",
+      desc: "Indica que o cliente também atua como fornecedor de produtos ou serviços.",
     },
     {
       title: "Não contribuinte",
-      desc: "Indica que o cliente é consumidor final e não contribui com ICMS.",
+      desc: "Indica que o cliente é consumidor final e não contribuinte do ICMS.",
     },
     {
       title: "Simples Nacional",
@@ -141,7 +141,7 @@ export default function Person() {
     },
     {
       title: "Situação",
-      desc: "Define a situação do cliente como ativo ou inativo no sistema.",
+      desc: "Define se o cliente encontra-se ativo ou inativo no sistema.",
     },
   ];
 
