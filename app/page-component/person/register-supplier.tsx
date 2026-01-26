@@ -4,9 +4,8 @@ export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "@/components/form/form-input";
-import { personZod, PersonFormProps } from "@/app/person/schemas";
+import { PersonFormProps } from "@/app/person/schemas";
 import { Button } from "@/components/ui/button";
 import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
 import { supabase } from "@/lib/supabaseClient";
@@ -20,16 +19,24 @@ import {
 } from "@/components/ui/select";
 import { ChevronDown } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { maskCNPJ, maskCPF, maskTelefone } from "@/utils/masks";
 
-export default function Person() {
+export default function Supplier() {
   const [submitting, setSubmitting] = useState(false);
   const [tipoPessoa, setTipoPessoa] = useState<string>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const isEdit = Boolean(id);
 
   const form = useForm<PersonFormProps>({
-    resolver: zodResolver(personZod),
+    shouldUnregister: true,
     defaultValues: {
       nome: "",
-      idade: undefined,
+      idade: "",
       cnpjcpf: "",
       email: "",
       telefone: "",
@@ -37,42 +44,96 @@ export default function Person() {
     },
   });
 
+  type TipoPessoaDB = "F" | "J" | "E";
+
+  useEffect(() => {
+    if (!id) return;
+
+    async function carregarPessoa() {
+      const { data, error } = await supabase
+        .from("pessoas")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) {
+        alert("Erro ao carregar pessoa para edição");
+        return;
+      }
+
+      form.reset({
+        nome: String(data.nome ?? ""),
+        idade: String(data.idade ?? ""),
+        cnpjcpf:
+          data.tp === "J"
+            ? maskCNPJ(String(data.cnpjcpf ?? ""))
+            : data.tp === "F"
+              ? maskCPF(String(data.cnpjcpf ?? ""))
+              : String(data.cnpjcpf ?? ""),
+        email: String(data.email ?? ""),
+        telefone: maskTelefone(String(data.telefone ?? "")),
+        tipo: data.tp,
+      });
+
+      const tipoReverseMap: Record<TipoPessoaDB, string> = {
+        F: "fisica",
+        J: "juridica",
+        E: "estrangeiro",
+      };
+
+      setTipoPessoa(tipoReverseMap[data.tp as TipoPessoaDB]);
+    }
+
+    carregarPessoa();
+  }, [id, form]);
+
   const handleSubmit = async (values: PersonFormProps) => {
     setSubmitting(true);
 
-    const cnpjcpfFinal = values.tipo === "E" ? "9999999999999" : values.cnpjcpf;
+    const cnpjcpfFinal =
+      values.tipo === "E"
+        ? "99999999999999"
+        : (values.cnpjcpf ?? "").replace(/\D/g, "");
 
-    const { error } = await supabase.from("pessoas").insert([
-      {
-        nome: values.nome,
-        idade: values.idade,
-        tp: values.tipo,
-        cnpjcpf: cnpjcpfFinal,
-        email: values.email,
-        telefone: values.telefone,
-      },
-    ]);
+    const payload = {
+      nome: values.nome,
+      idade: values.idade ? Number(values.idade) : null,
+      tp: values.tipo,
+      cnpjcpf: cnpjcpfFinal,
+      email: values.email,
+      telefone: values.telefone?.replace(/\D/g, ""),
+    };
 
-    if (error) {
-      console.error("Erro ao salvar no Supabase:", error);
-      alert("Erro ao salvar pessoa no banco de dados.");
-    } else {
-      alert("Pessoa cadastrada com sucesso!");
-      form.reset();
-      setTipoPessoa("");
-    }
+    const { error } = isEdit
+      ? await supabase.from("pessoas").update(payload).eq("id", id)
+      : await supabase.from("pessoas").insert([payload]);
 
     setSubmitting(false);
+
+    if (error) {
+      alert("Erro ao salvar pessoa");
+      return;
+    }
+
+    alert(
+      isEdit
+        ? "Pessoa atualizada com sucesso!"
+        : "Pessoa cadastrada com sucesso!",
+    );
+
+    form.reset();
+    setTipoPessoa("");
+    router.push("/person");
   };
 
   const itens = [
     {
       title: "Fornecedor",
-      desc: "Marque se o cliente também atua como fornecedor de produtos ou serviços.",
+      desc: "Indica que o cliente também atua como fornecedor de produtos ou serviços.",
     },
     {
       title: "Não contribuinte",
-      desc: "Indica que o cliente é consumidor final e não contribui com ICMS.",
+      desc: "Indica que o cliente é consumidor final e não contribuinte do ICMS.",
     },
     {
       title: "Simples Nacional",
@@ -80,13 +141,15 @@ export default function Person() {
     },
     {
       title: "Situação",
-      desc: "Define se o cliente está ativo ou inativo no sistema.",
+      desc: "Define se o cliente encontra-se ativo ou inativo no sistema.",
     },
   ];
 
   return (
     <div className="relative w-full">
-      <TitlePersonalizado>Cadastrar Fornecedor</TitlePersonalizado>
+      <TitlePersonalizado>
+        {isEdit ? "Editar Fornecedor" : "Cadastrar Fornecedor"}
+      </TitlePersonalizado>
 
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Card className="p-4">
@@ -114,12 +177,17 @@ export default function Person() {
                     estrangeiro: "E",
                   } as const;
 
-                  form.setValue("tipo", tipoMap[value as keyof typeof tipoMap]);
+                  form.setValue(
+                    "tipo",
+                    tipoMap[value as keyof typeof tipoMap],
+                    {
+                      shouldValidate: true,
+                    },
+                  );
 
                   if (value === "estrangeiro") {
-                    form.setValue("cnpjcpf", "9999999999999");
-                  } else {
-                    form.setValue("cnpjcpf", "");
+                    const padraoEstrangeiro = "99999999999999";
+                    form.setValue("cnpjcpf", maskCNPJ(padraoEstrangeiro));
                   }
                 }}
               >
@@ -141,9 +209,32 @@ export default function Person() {
               control={form.control}
               name="cnpjcpf"
               label="CPF/CNPJ"
-              required
-              maxLength={14}
               disabled={tipoPessoa === "estrangeiro"}
+              onChange={(e) => {
+                let raw = e.target.value.replace(/\D/g, "");
+
+                if (tipoPessoa === "estrangeiro") {
+                  const padraoEstrangeiro = "99999999999999";
+                  form.setValue("cnpjcpf", maskCNPJ(padraoEstrangeiro), {
+                    shouldValidate: true,
+                  });
+                  return;
+                }
+
+                if (tipoPessoa === "juridica") {
+                  raw = raw.slice(0, 14);
+                  form.setValue("cnpjcpf", maskCNPJ(raw), {
+                    shouldValidate: true,
+                  });
+                }
+
+                if (tipoPessoa === "fisica") {
+                  raw = raw.slice(0, 11);
+                  form.setValue("cnpjcpf", maskCPF(raw), {
+                    shouldValidate: true,
+                  });
+                }
+              }}
             />
 
             <FormInput
@@ -159,7 +250,6 @@ export default function Person() {
               control={form.control}
               name="idade"
               label="Idade"
-              required
               className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               maxLength={3}
             />
@@ -169,8 +259,13 @@ export default function Person() {
               control={form.control}
               name="telefone"
               label="Telefone"
-              required
-              maxLength={11}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+                form.setValue("telefone", maskTelefone(raw), {
+                  shouldValidate: true,
+                });
+              }}
             />
 
             <FormInput
@@ -214,9 +309,22 @@ export default function Person() {
           </div>
         </Card>
 
-        <div className="flex justify-end mt-4">
-          <Button type="submit" disabled={submitting}>
-            {submitting ? "Enviando..." : "Enviar"}
+        <div className="flex justify-end mt-4 gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/person")}
+          >
+            {submitting ? "Voltando..." : "Voltar"}
+          </Button>
+          <Button type="submit" variant={"default"} disabled={submitting}>
+            {submitting
+              ? isEdit
+                ? "Salvando..."
+                : "Enviando..."
+              : isEdit
+                ? "Atualizar"
+                : "Cadastrar"}
           </Button>
         </div>
       </form>

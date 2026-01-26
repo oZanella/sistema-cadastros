@@ -20,6 +20,7 @@ type Pessoa = {
   cnpjcpf: string;
   email: string;
   telefone: string;
+  pessoa: "P" | "F";
 };
 
 function formatTipo(tipo: string) {

@@ -40,6 +40,9 @@ export const personZod = z
         .regex(/^\d{10,11}$/, "Telefone deve ter entre 10 e 11 dígitos")
         .optional(),
     ),
+    pessoa: z
+      .enum(["P", "F"])
+      .refine((val) => !!val, { message: "Pessoa é obrigatória" }),
   })
 
   .superRefine((data, ctx) => {

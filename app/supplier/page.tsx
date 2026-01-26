@@ -1,14 +1,14 @@
-import Supplier from "../page-component/person/supplier";
+import SupplierList from "../page-component/person/page-list-supplier/page";
 
 export const metadata = {
-  title: "Cadastro de Pessoas",
+  title: "Cadastro de Fornecedores",
   description: "Cadastro",
 };
 
 export default async function CadSupplier() {
   return (
     <>
-      <Supplier />
+      <SupplierList />
     </>
   );
 }
