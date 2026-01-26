@@ -49,7 +49,7 @@ export default function SupplierList() {
 
     if (error) {
       console.error(error);
-      alert("Erro ao carregar pessoas");
+      alert("Erro ao carregar fornecedores");
     } else {
       setDados(data as Pessoa[]);
     }
@@ -155,7 +155,7 @@ export default function SupplierList() {
                     <td colSpan={6} className="text-center py-8 text-gray-500">
                       {pesquisa
                         ? "Nenhum resultado encontrado"
-                        : "Nenhuma pessoa cadastrada"}
+                        : "Nenhum fornecedor cadastrada"}
                     </td>
                   </tr>
                 ) : (
@@ -187,7 +187,7 @@ export default function SupplierList() {
                           <Pencil
                             className="w-4 h-4 cursor-pointer text-blue-600 hover:text-blue-800"
                             onClick={() =>
-                              router.push(`/person/register?id=${item.id}`)
+                              router.push(`/supplier/register?id=${item.id}`)
                             }
                           />
 
@@ -211,8 +211,8 @@ export default function SupplierList() {
         onClose={fecharModalExcluir}
         onConfirm={confirmarExclusao}
         loading={excluindo}
-        title="Excluir Pessoa"
-        description={`Tem certeza que deseja excluir a pessoa "${
+        title="Excluir Fornecedor"
+        description={`Tem certeza que deseja excluir o fornecedor "${
           pessoaSelecionada?.nome ?? ""
         }"?`}
       />

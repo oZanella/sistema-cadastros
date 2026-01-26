@@ -123,7 +123,7 @@ export default function Person() {
 
     form.reset();
     setTipoPessoa("");
-    router.push("/person");
+    router.push("/supplier");
   };
 
   const itens = [
@@ -313,7 +313,7 @@ export default function Person() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push("/person")}
+            onClick={() => router.push("/supplier")}
           >
             {submitting ? "Voltando..." : "Voltar"}
           </Button>

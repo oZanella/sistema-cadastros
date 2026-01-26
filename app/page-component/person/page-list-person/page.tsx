@@ -45,7 +45,10 @@ export default function PersonList() {
   async function carregarPessoas() {
     setLoading(true);
 
-    const { data, error } = await supabase.from("pessoas").select("*");
+    const { data, error } = await supabase
+      .from("pessoas")
+      .select("*")
+      .eq("pessoa", "P");
 
     if (error) {
       console.error(error);

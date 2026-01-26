@@ -57,7 +57,7 @@ export default function Supplier() {
         .single();
 
       if (error || !data) {
-        alert("Erro ao carregar pessoa para edição");
+        alert("Erro ao carregar fornecedor para edição");
         return;
       }
 
@@ -111,37 +111,37 @@ export default function Supplier() {
     setSubmitting(false);
 
     if (error) {
-      alert("Erro ao salvar pessoa");
+      alert("Erro ao salvar fornecedor");
       return;
     }
 
     alert(
       isEdit
-        ? "Pessoa atualizada com sucesso!"
-        : "Pessoa cadastrada com sucesso!",
+        ? "Fornecedor atualizado com sucesso!"
+        : "Fornecedor cadastrado com sucesso!",
     );
 
     form.reset();
     setTipoPessoa("");
-    router.push("/person");
+    router.push("/supplier");
   };
 
   const itens = [
     {
       title: "Fornecedor",
-      desc: "Indica que o cliente também atua como fornecedor de produtos ou serviços.",
+      desc: "Indica que o fornecedor também atua como fornecedor de produtos ou serviços.",
     },
     {
       title: "Não contribuinte",
-      desc: "Indica que o cliente é consumidor final e não contribuinte do ICMS.",
+      desc: "Indica que o fornecedor é consumidor final e não contribuinte do ICMS.",
     },
     {
       title: "Simples Nacional",
-      desc: "Indica que o cliente é optante pelo regime tributário do Simples Nacional.",
+      desc: "Indica que o fornecedor é optante pelo regime tributário do Simples Nacional.",
     },
     {
       title: "Situação",
-      desc: "Define se o cliente encontra-se ativo ou inativo no sistema.",
+      desc: "Define se o fornecedor encontra-se ativo ou inativo no sistema.",
     },
   ];
 
@@ -313,7 +313,7 @@ export default function Supplier() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push("/person")}
+            onClick={() => router.push("/supplier")}
           >
             {submitting ? "Voltando..." : "Voltar"}
           </Button>
