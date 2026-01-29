@@ -102,6 +102,7 @@ export default function Person() {
       cnpjcpf: cnpjcpfFinal,
       email: values.email,
       telefone: values.telefone?.replace(/\D/g, ""),
+      pessoa: "P",
     };
 
     const { error } = isEdit
@@ -123,7 +124,7 @@ export default function Person() {
 
     form.reset();
     setTipoPessoa("");
-    router.push("/supplier");
+    router.push("/person");
   };
 
   const itens = [
@@ -313,7 +314,7 @@ export default function Person() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push("/supplier")}
+            onClick={() => router.push("/person")}
           >
             {submitting ? "Voltando..." : "Voltar"}
           </Button>

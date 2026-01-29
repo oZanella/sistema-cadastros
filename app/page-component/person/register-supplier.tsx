@@ -54,6 +54,7 @@ export default function Supplier() {
         .from("pessoas")
         .select("*")
         .eq("id", id)
+        .eq("pessoa", "F")
         .single();
 
       if (error || !data) {
@@ -102,6 +103,7 @@ export default function Supplier() {
       cnpjcpf: cnpjcpfFinal,
       email: values.email,
       telefone: values.telefone?.replace(/\D/g, ""),
+      pessoa: "F",
     };
 
     const { error } = isEdit
