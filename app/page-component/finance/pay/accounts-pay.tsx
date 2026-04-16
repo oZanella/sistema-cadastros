@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-import { Pencil, Trash, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import FinanceEditModal from "../modal-accounts";
-import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
+import { useState, useEffect } from 'react';
+import { Card } from '@/components/ui/card';
+import { Pencil, Trash, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import FinanceEditModal from '../modal-accounts';
+import TitlePersonalizado from '@/components/ui-padrao/text-personalizado';
 
 type FinanceItem = {
   id: number;
-  tipo: "Aberto" | "Fechado" | "Parcial";
+  tipo: 'Aberto' | 'Fechado' | 'Parcial';
   data: string;
   nome: string;
   historico: string;
@@ -18,61 +18,61 @@ type FinanceItem = {
 };
 
 function formatDate(date: string) {
-  const [y, m, d] = date.split("-");
+  const [y, m, d] = date.split('-');
   return `${d}/${m}/${y}`;
 }
 
 function formatValor(v: number) {
-  return v.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+  return v.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 }
 
 export default function FinancePay() {
-  const [pesquisa, setPesquisa] = useState("");
+  const [pesquisa, setPesquisa] = useState('');
   const [dados, setDados] = useState<FinanceItem[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<FinanceItem | null>(null);
   const [formData, setFormData] = useState({
-    tipo: "",
-    data: "",
-    nome: "",
-    historico: "",
-    valor: "",
+    tipo: '',
+    data: '',
+    nome: '',
+    historico: '',
+    valor: '',
   });
 
   useEffect(() => {
     setDados([
       {
         id: 1,
-        tipo: "Aberto",
-        data: "2024-01-15",
-        nome: "Salário",
-        historico: "Pagamento mensal",
+        tipo: 'Aberto',
+        data: '2024-01-15',
+        nome: 'Salário',
+        historico: 'Pagamento mensal',
         valor: 5000.0,
       },
       {
         id: 2,
-        tipo: "Aberto",
-        data: "2024-01-20",
-        nome: "Aluguel",
-        historico: "Pagamento aluguel Janeiro",
+        tipo: 'Aberto',
+        data: '2024-01-20',
+        nome: 'Aluguel',
+        historico: 'Pagamento aluguel Janeiro',
         valor: 1500.0,
       },
       {
         id: 3,
-        tipo: "Fechado",
-        data: "2024-01-22",
-        nome: "Supermercado",
-        historico: "Compras mensais",
+        tipo: 'Fechado',
+        data: '2024-01-22',
+        nome: 'Supermercado',
+        historico: 'Compras mensais',
         valor: 800.5,
       },
       {
         id: 4,
-        tipo: "Parcial",
-        data: "2024-08-27",
-        nome: "Supermercado",
-        historico: "Compras",
+        tipo: 'Parcial',
+        data: '2024-08-27',
+        nome: 'Supermercado',
+        historico: 'Compras',
         valor: 75.2,
       },
     ]);
@@ -84,7 +84,7 @@ export default function FinancePay() {
       tipo: item.tipo,
       data: item.data,
       nome: item.nome,
-      historico: item.historico || "",
+      historico: item.historico || '',
       valor: item.valor.toString(),
     });
     setIsEditOpen(true);
@@ -102,7 +102,7 @@ export default function FinancePay() {
         item.id === editingItem.id
           ? {
               ...item,
-              tipo: formData.tipo as "Aberto" | "Fechado" | "Parcial",
+              tipo: formData.tipo as 'Aberto' | 'Fechado' | 'Parcial',
               data: formData.data,
               nome: formData.nome,
               historico: formData.historico,
@@ -113,7 +113,7 @@ export default function FinancePay() {
     );
 
     setIsEditOpen(false);
-    alert("Registro atualizado com sucesso!");
+    alert('Registro atualizado com sucesso!');
   };
 
   const dadosFiltrados = dados.filter((item) =>
@@ -133,7 +133,7 @@ export default function FinancePay() {
           />
 
           <Button
-            variant={"defaultAdd"}
+            variant={'defaultAdd'}
             className="bg-green-600 hover:bg-green-700 cursor-pointer"
           >
             <Plus className="w-4 h-4 " />
@@ -176,8 +176,8 @@ export default function FinancePay() {
                   <tr>
                     <td colSpan={6} className="text-center text-gray-500 py-8">
                       {pesquisa
-                        ? "Nenhum resultado para esta pesquisa"
-                        : "Nenhum registro cadastrado"}
+                        ? 'Nenhum resultado para esta pesquisa'
+                        : 'Nenhum registro cadastrado'}
                     </td>
                   </tr>
                 ) : (
@@ -187,11 +187,11 @@ export default function FinancePay() {
                       className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 cursor-default"
                     >
                       <td className="py-3 px-4">
-                        {item.tipo === "Aberto" ? (
+                        {item.tipo === 'Aberto' ? (
                           <div className="px-2 py-1 rounded bg-gray-500 text-white text-xs font-bold w-fit">
                             ABERTO
                           </div>
-                        ) : item.tipo === "Fechado" ? (
+                        ) : item.tipo === 'Fechado' ? (
                           <div className="px-2 py-1 rounded bg-green-700 text-white text-xs font-bold w-fit">
                             FECHADO
                           </div>

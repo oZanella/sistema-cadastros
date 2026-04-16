@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-import { Pencil, Trash, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import FinanceEditModal from "../modal-accounts";
-import TitlePersonalizado from "@/components/ui-padrao/text-personalizado";
+import { useState, useEffect } from 'react';
+import { Card } from '@/components/ui/card';
+import { Pencil, Trash, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import FinanceEditModal from '../modal-accounts';
+import TitlePersonalizado from '@/components/ui-padrao/text-personalizado';
 
 type FinanceItem = {
   id: number;
-  tipo: "Aberto" | "Fechado" | "Parcial";
+  tipo: 'Aberto' | 'Fechado' | 'Parcial';
   data: string;
   nome: string;
   historico: string;
@@ -18,133 +18,133 @@ type FinanceItem = {
 };
 
 function formatDate(date: string) {
-  const [y, m, d] = date.split("-");
+  const [y, m, d] = date.split('-');
   return `${d}/${m}/${y}`;
 }
 
 function formatValor(v: number) {
-  return v.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+  return v.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 }
 
 export default function FinanceReceive() {
-  const [pesquisa, setPesquisa] = useState("");
+  const [pesquisa, setPesquisa] = useState('');
   const [dados, setDados] = useState<FinanceItem[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<FinanceItem | null>(null);
   const [formData, setFormData] = useState({
-    tipo: "",
-    data: "",
-    nome: "",
-    historico: "",
-    valor: "",
+    tipo: '',
+    data: '',
+    nome: '',
+    historico: '',
+    valor: '',
   });
 
   useEffect(() => {
     setDados([
       {
         id: 1,
-        tipo: "Aberto",
-        data: "2023-04-27",
-        nome: "Venda",
-        historico: "",
+        tipo: 'Aberto',
+        data: '2023-04-27',
+        nome: 'Venda',
+        historico: '',
         valor: 3920.0,
       },
       {
         id: 2,
-        tipo: "Fechado",
-        data: "2024-01-20",
-        nome: "Aluguel",
-        historico: "Pagamento aluguel Janeiro",
+        tipo: 'Fechado',
+        data: '2024-01-20',
+        nome: 'Aluguel',
+        historico: 'Pagamento aluguel Janeiro',
         valor: 1500.0,
       },
       {
         id: 3,
-        tipo: "Aberto",
-        data: "2024-01-22",
-        nome: "Supermercado",
-        historico: "Compras mensais",
+        tipo: 'Aberto',
+        data: '2024-01-22',
+        nome: 'Supermercado',
+        historico: 'Compras mensais',
         valor: 800.5,
       },
       {
         id: 4,
-        tipo: "Parcial",
-        data: "2024-02-05",
-        nome: "Venda à Vista",
-        historico: "Venda de mercadorias balcão",
+        tipo: 'Parcial',
+        data: '2024-02-05',
+        nome: 'Venda à Vista',
+        historico: 'Venda de mercadorias balcão',
         valor: 1250.0,
       },
       {
         id: 5,
-        tipo: "Fechado",
-        data: "2024-02-10",
-        nome: "Venda Parcelada",
-        historico: "1ª parcela venda cliente João Silva",
+        tipo: 'Fechado',
+        data: '2024-02-10',
+        nome: 'Venda Parcelada',
+        historico: '1ª parcela venda cliente João Silva',
         valor: 980.0,
       },
       {
         id: 6,
-        tipo: "Aberto",
-        data: "2024-02-15",
-        nome: "Prestação de Serviço",
-        historico: "Serviço de manutenção mensal",
+        tipo: 'Aberto',
+        data: '2024-02-15',
+        nome: 'Prestação de Serviço',
+        historico: 'Serviço de manutenção mensal',
         valor: 600.0,
       },
       {
         id: 7,
-        tipo: "Fechado",
-        data: "2024-02-18",
-        nome: "Mensalidade",
-        historico: "Mensalidade sistema fevereiro",
+        tipo: 'Fechado',
+        data: '2024-02-18',
+        nome: 'Mensalidade',
+        historico: 'Mensalidade sistema fevereiro',
         valor: 299.9,
       },
       {
         id: 8,
-        tipo: "Aberto",
-        data: "2024-02-20",
-        nome: "Venda Online",
-        historico: "Pedido e-commerce #4587",
+        tipo: 'Aberto',
+        data: '2024-02-20',
+        nome: 'Venda Online',
+        historico: 'Pedido e-commerce #4587',
         valor: 1840.75,
       },
       {
         id: 9,
-        tipo: "Aberto",
-        data: "2024-02-22",
-        nome: "Contrato",
-        historico: "Recebimento contrato empresa ABC Ltda",
+        tipo: 'Aberto',
+        data: '2024-02-22',
+        nome: 'Contrato',
+        historico: 'Recebimento contrato empresa ABC Ltda',
         valor: 3500.0,
       },
       {
         id: 10,
-        tipo: "Aberto",
-        data: "2024-02-25",
-        nome: "Licenciamento",
-        historico: "Licença anual software",
+        tipo: 'Aberto',
+        data: '2024-02-25',
+        nome: 'Licenciamento',
+        historico: 'Licença anual software',
         valor: 1200.0,
       },
       {
         id: 11,
-        tipo: "Parcial",
-        data: "2024-02-27",
-        nome: "Comissão",
-        historico: "Comissão sobre vendas janeiro",
+        tipo: 'Parcial',
+        data: '2024-02-27',
+        nome: 'Comissão',
+        historico: 'Comissão sobre vendas janeiro',
         valor: 450.0,
       },
       {
         id: 12,
-        tipo: "Parcial",
-        data: "2024-03-01",
-        nome: "Venda a Prazo",
-        historico: "Venda faturada cliente XPTO",
+        tipo: 'Parcial',
+        data: '2024-03-01',
+        nome: 'Venda a Prazo',
+        historico: 'Venda faturada cliente XPTO',
         valor: 2100.0,
       },
       {
         id: 13,
-        tipo: "Aberto",
-        data: "2024-03-05",
-        nome: "Recuperação de Crédito",
-        historico: "Pagamento de título em atraso",
+        tipo: 'Aberto',
+        data: '2024-03-05',
+        nome: 'Recuperação de Crédito',
+        historico: 'Pagamento de título em atraso',
         valor: 760.0,
       },
     ]);
@@ -156,7 +156,7 @@ export default function FinanceReceive() {
       tipo: item.tipo,
       data: item.data,
       nome: item.nome,
-      historico: item.historico || "",
+      historico: item.historico || '',
       valor: item.valor.toString(),
     });
     setIsEditOpen(true);
@@ -174,7 +174,7 @@ export default function FinanceReceive() {
         item.id === editingItem.id
           ? {
               ...item,
-              tipo: formData.tipo as "Aberto" | "Fechado" | "Parcial",
+              tipo: formData.tipo as 'Aberto' | 'Fechado' | 'Parcial',
               data: formData.data,
               nome: formData.nome,
               historico: formData.historico,
@@ -185,7 +185,7 @@ export default function FinanceReceive() {
     );
 
     setIsEditOpen(false);
-    alert("Registro atualizado com sucesso!");
+    alert('Registro atualizado com sucesso!');
   };
 
   const dadosFiltrados = dados.filter((item) =>
@@ -205,7 +205,7 @@ export default function FinanceReceive() {
           />
 
           <Button
-            variant={"defaultAdd"}
+            variant={'defaultAdd'}
             className="bg-green-600 hover:bg-green-700 cursor-pointer"
           >
             <Plus className="w-4 h-4 " />
@@ -247,8 +247,8 @@ export default function FinanceReceive() {
                   <tr>
                     <td colSpan={6} className="text-center text-gray-500 py-8">
                       {pesquisa
-                        ? "Nenhum resultado para esta pesquisa"
-                        : "Nenhum registro cadastrado"}
+                        ? 'Nenhum resultado para esta pesquisa'
+                        : 'Nenhum registro cadastrado'}
                     </td>
                   </tr>
                 ) : (
@@ -258,11 +258,11 @@ export default function FinanceReceive() {
                       className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 cursor-default"
                     >
                       <td className="py-3 px-4">
-                        {item.tipo === "Aberto" ? (
+                        {item.tipo === 'Aberto' ? (
                           <div className="px-2 py-1 rounded bg-gray-500 text-white text-xs font-bold w-fit">
                             ABERTO
                           </div>
-                        ) : item.tipo === "Fechado" ? (
+                        ) : item.tipo === 'Fechado' ? (
                           <div className="px-2 py-1 rounded bg-green-700 text-white text-xs font-bold w-fit">
                             FECHADO
                           </div>
